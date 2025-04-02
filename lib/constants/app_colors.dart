@@ -1,0 +1,8 @@
+import 'package:flutter/material.dart';
+
+class AppColors {
+  static const red = Color(0xFFe42528);
+  static const white = Color(0xFFFFFFFF);
+  static const sapphire = Color(0xFF14517E);
+  static const muted_blue = Color(0xFF3b7098);
+}
