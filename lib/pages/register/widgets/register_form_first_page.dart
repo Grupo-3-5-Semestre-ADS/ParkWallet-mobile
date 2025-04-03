@@ -25,6 +25,8 @@ class RegisterFormFirstPage extends GetView<RegisterController>{
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
+              counterText: ""
+
           ),
           maxLength: 255,
         ),
@@ -42,6 +44,7 @@ class RegisterFormFirstPage extends GetView<RegisterController>{
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
+              counterText: ""
           ),
         ),
 

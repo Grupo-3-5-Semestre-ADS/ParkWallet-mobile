@@ -59,7 +59,9 @@ class LoginPage extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
+                          counterText: ""
                       ),
+                      maxLength: 255
                     ),
 
                     const SizedBox(height: 16),
@@ -74,7 +76,9 @@ class LoginPage extends StatelessWidget {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
+                          counterText: ""
                       ),
+                      maxLength: 255,
                     ),
 
                     const SizedBox(height: 8),

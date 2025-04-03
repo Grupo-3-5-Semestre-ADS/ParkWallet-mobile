@@ -23,6 +23,8 @@ class RegisterFormSecondPage extends GetView<RegisterController> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
+              counterText: ""
+
           ),        ),
         const SizedBox(height: 16),
         TextField(
@@ -35,7 +37,10 @@ class RegisterFormSecondPage extends GetView<RegisterController> {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-          ),        ),
+              counterText: ""
+
+          ),
+        ),
         const SizedBox(height: 16),
         TextField(
           controller: controller.repeatPasswordCtrl,
