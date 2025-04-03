@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_wallet/pages/home/controllers/HomeController.dart';
+import 'package:park_wallet/pages/home/controllers/home_controller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

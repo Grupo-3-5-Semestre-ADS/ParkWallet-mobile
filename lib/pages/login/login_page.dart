@@ -4,31 +4,38 @@ import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
 import 'package:park_wallet/pages/login/controllers/login_controller.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
-import 'package:park_wallet/services/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final _loginCtrl = Get.find<LoginController>();
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SvgPicture.asset(
-              'assets/images/bottom_waves.svg',
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.cover,
+    return Stack(
+      children: [
+        Container(
+          color: AppColors.white,
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: SizedBox(
+            height: 150, // Altura máxima
+            width: double.infinity,
+            child: FittedBox(
+              fit: BoxFit.fill, // Estica na horizontal e vertical se necessário
+              alignment: Alignment.bottomCenter,
+              child: SvgPicture.asset(
+                'assets/images/bottom_waves.svg',
+                width: MediaQuery.of(context).size.width,
+              ),
             ),
           ),
+        ),
 
-          Center(
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
             child: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -36,11 +43,10 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 
+                    const SizedBox(height: 40),
+
                     // Logo
-                    Image.asset(
-                      'assets/images/logo.png',
-                      width: 300,
-                    ),
+                    Image.asset('assets/images/logo.png', width: 300),
 
                     const SizedBox(height: 40),
 
@@ -82,15 +88,12 @@ class LoginPage extends StatelessWidget {
                         },
                         child: const Text(
                           'Esqueceu a senha?',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          ),
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
 
                     // Botão Entrar
                     AppButton(
@@ -116,8 +119,8 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -19,9 +19,14 @@ class LoginController extends GetxController {
   }
 
   void register() {
+    cleanFields();
     Get.toNamed('/register');
   }
 
+  void cleanFields() {
+    emailCtrl.text = "";
+    passwordCtrl.text = "";
+  }
   @override
   void dispose() {
     emailCtrl.dispose();
