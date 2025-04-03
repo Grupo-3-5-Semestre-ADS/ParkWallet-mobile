@@ -2,24 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
+import 'package:park_wallet/pages/login/controllers/login_controller.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
-import 'package:park_wallet/services/AuthService.dart';
+import 'package:park_wallet/services/auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
-  void _login() {
-    final authService = Get.find<AuthService>();
-    authService.saveToken('token-jwt-falso');
-    Get.offAllNamed('/home');
-  }
-
-  void _register() {
-    Get.toNamed('/register');
-  }
-
   @override
   Widget build(BuildContext context) {
+
+    final _loginCtrl = Get.find<LoginController>();
+
     return Scaffold(
       backgroundColor: AppColors.white,
       resizeToAvoidBottomInset: false,
@@ -52,6 +46,7 @@ class LoginPage extends StatelessWidget {
 
                     // Campo de login
                     TextField(
+                      controller: _loginCtrl.emailCtrl,
                       decoration: InputDecoration(
                         labelText: 'Email',
                         hintText: 'Insira seu email',
@@ -65,6 +60,7 @@ class LoginPage extends StatelessWidget {
 
                     // Campo de senha
                     TextField(
+                      controller: _loginCtrl.passwordCtrl,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Senha',
@@ -99,7 +95,7 @@ class LoginPage extends StatelessWidget {
                     // Botão Entrar
                     AppButton(
                       label: "Entrar",
-                      onPressed: _login,
+                      onPressed: _loginCtrl.login,
                       backgroundColor: AppColors.sapphire,
                       textColor: Colors.white,
                     ),
@@ -109,7 +105,7 @@ class LoginPage extends StatelessWidget {
                     // Botão Cadastrar-se
                     AppButton(
                       label: "Cadastrar-se",
-                      onPressed: _register,
+                      onPressed: _loginCtrl.register,
                       backgroundColor: AppColors.muted_blue,
                       textColor: Colors.white,
                     ),

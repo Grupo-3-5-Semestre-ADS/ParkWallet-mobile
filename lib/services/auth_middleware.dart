@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:park_wallet/services/AuthService.dart';
+import 'package:park_wallet/services/auth_service.dart';
 
 class AuthMiddleware extends GetMiddleware {
   @override

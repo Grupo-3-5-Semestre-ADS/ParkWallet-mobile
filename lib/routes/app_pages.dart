@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:park_wallet/pages/home/home_binding.dart';
 import 'package:park_wallet/pages/home/home_page.dart';
 import 'package:park_wallet/pages/login/login_page.dart';
-import 'package:park_wallet/services/AuthMiddleware.dart';
+import 'package:park_wallet/services/auth_middleware.dart';
 
 part 'app_routes.dart';
 

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
+import 'package:park_wallet/pages/login/controllers/login_controller.dart';
 import 'package:park_wallet/routes/app_pages.dart';
-import 'package:park_wallet/services/AuthService.dart';
+import 'package:park_wallet/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  Get.put<LoginController>(LoginController());
   await Get.putAsync(() => AuthService().init());
 
   runApp(const MyApp());
