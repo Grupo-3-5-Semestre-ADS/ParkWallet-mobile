@@ -7,6 +7,7 @@ import 'package:park_wallet/pages/register/controllers/register_controller.dart'
 import 'package:park_wallet/pages/register/widgets/register_form_first_page.dart';
 import 'package:park_wallet/pages/register/widgets/register_form_second_page.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
+import 'package:park_wallet/pages/widgets/language_selector_button.dart';
 
 class RegisterPage extends GetView<RegisterController> {
   const RegisterPage({super.key});
@@ -59,6 +60,11 @@ class RegisterPage extends GetView<RegisterController> {
               ),
             ),
           ),
+        ),
+        Positioned(
+          top: 40,
+          right: 16,
+          child: LanguageSelectorButton(),
         ),
       ],
     );
