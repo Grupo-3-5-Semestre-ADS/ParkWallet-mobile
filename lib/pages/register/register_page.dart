@@ -8,6 +8,7 @@ import 'package:park_wallet/pages/register/widgets/register_form_first_page.dart
 import 'package:park_wallet/pages/register/widgets/register_form_second_page.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
 import 'package:park_wallet/pages/widgets/language_selector_button.dart';
+import 'package:park_wallet/pages/widgets/wave_background.dart';
 
 class RegisterPage extends GetView<RegisterController> {
   const RegisterPage({super.key});
@@ -16,22 +17,8 @@ class RegisterPage extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(color: AppColors.white),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            height: 150, // Altura máxima
-            width: double.infinity,
-            child: FittedBox(
-              fit: BoxFit.fill, // Estica na horizontal e vertical se necessário
-              alignment: Alignment.bottomCenter,
-              child: SvgPicture.asset(
-                'assets/images/bottom_waves.svg',
-                width: MediaQuery.of(context).size.width,
-              ),
-            ),
-          ),
-        ),
+        WaveBackground(),
+
         Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(

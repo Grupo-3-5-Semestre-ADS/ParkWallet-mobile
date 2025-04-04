@@ -38,6 +38,16 @@ class AppTranslations extends Translations {
       'home': 'Início',
       'history': 'Histórico',
       'news': 'Novidades',
+
+      'added_balance': 'Saldo adicionado',
+      'my_balance': 'Meu saldo',
+      'pay': 'Pagar',
+      'recharge': 'Recarregar',
+      'transaction_history': 'Histórico de Transações',
+      'see_more': 'Ver mais',
+      'insert_amount': 'Insira um valor',
+      'valid_amount_warning': 'Insira um valor válido.',
+      'oops': 'Oops',
     },
     'en_US': {
       'hello': 'Hello!',
@@ -74,6 +84,16 @@ class AppTranslations extends Translations {
       'home': 'Home',
       'history': 'History',
       'news': 'News',
+
+      'added_balance': 'Added Balance',
+      'my_balance': 'My Balance',
+      'pay': 'Pay',
+      'recharge': 'Recharge',
+      'transaction_history': 'Transaction History',
+      'see_more': 'See More',
+      'insert_amount': 'Enter an amount',
+      'valid_amount_warning': 'Please enter a valid amount.',
+      'oops': 'Oops',
     },
     'es_ES': {
       'hello': '¡Hola!',
@@ -110,6 +130,17 @@ class AppTranslations extends Translations {
       'home': 'Inicio',
       'history': 'Historial',
       'news': 'Novedades',
+
+      'added_balance': 'Saldo añadido',
+      'my_balance': 'Mi saldo',
+      'pay': 'Pagar',
+      'recharge': 'Recargar',
+      'transaction_history': 'Historial de transacciones',
+      'see_more': 'Ver más',
+      'insert_amount': 'Ingresa un valor',
+      'valid_amount_warning': 'Ingresa un valor válido.',
+      'oops': 'Uy',
+
     },
   };
 }
