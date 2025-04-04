@@ -31,6 +31,13 @@ class AppTranslations extends Translations {
       'confirm_password_hint': 'Confirme a senha inserida',
       'back': 'Voltar',
       'finish': 'Finalizar',
+
+      // Traduções do menu inferior
+      'map': 'Mapa',
+      'stores': 'Lojas',
+      'home': 'Início',
+      'history': 'Histórico',
+      'news': 'Novidades',
     },
     'en_US': {
       'hello': 'Hello!',
@@ -60,6 +67,13 @@ class AppTranslations extends Translations {
       'confirm_password_hint': 'Confirm the entered password',
       'back': 'Back',
       'finish': 'Finish',
+
+      // Bottom navigation translations
+      'map': 'Map',
+      'stores': 'Stores',
+      'home': 'Home',
+      'history': 'History',
+      'news': 'News',
     },
     'es_ES': {
       'hello': '¡Hola!',
@@ -89,6 +103,13 @@ class AppTranslations extends Translations {
       'confirm_password_hint': 'Confirma la contraseña ingresada',
       'back': 'Atrás',
       'finish': 'Finalizar',
+
+      // Traducciones del menú inferior
+      'map': 'Mapa',
+      'stores': 'Tiendas',
+      'home': 'Inicio',
+      'history': 'Historial',
+      'news': 'Novedades',
     },
   };
 }

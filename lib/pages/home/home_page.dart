@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:park_wallet/pages/home/controllers/home_controller.dart';
 import 'package:park_wallet/pages/widgets/common_app_bar.dart';
+import 'package:park_wallet/pages/widgets/common_bottom_navigation_bar.dart';
 import 'package:park_wallet/pages/widgets/common_drawer.dart';
 
 class HomePage extends StatelessWidget {
@@ -21,6 +22,8 @@ class HomePage extends StatelessWidget {
         onPressed: controller.increment,
         child: const Icon(Icons.add),
       ),
+      bottomNavigationBar: CommonBottomNavigationBar(currentRoute: "/home",),
     );
+
   }
 }
