@@ -8,4 +8,6 @@ class AppColors {
   static const muted_blue = Color(0xFF3b7098);
 
   static const green = Color(0xFF118418);
+
+  static const very_light_grey = Color(0xFFf7f7f7);
 }

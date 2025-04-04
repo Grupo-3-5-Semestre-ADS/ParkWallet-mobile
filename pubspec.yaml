@@ -66,6 +66,9 @@ flutter:
   assets:
     - assets/images/bottom_waves.svg
     - assets/images/logo.png
+    - assets/images/brasil-circle-flag.png
+    - assets/images/spain-circle-flag.png
+    - assets/images/uk-circle-flag.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
