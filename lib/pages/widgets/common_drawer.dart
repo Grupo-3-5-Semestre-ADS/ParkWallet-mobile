@@ -42,7 +42,7 @@ class CommonDrawer extends StatelessWidget {
               children: [
                 ListTile(
                   leading: const Icon(Icons.home),
-                  title: const Text("Início"),
+                  title: Text("home".tr),
                   onTap: () {
                     Get.offNamed('/home'); // Navegar para a tela inicial
                   },
@@ -50,7 +50,7 @@ class CommonDrawer extends StatelessWidget {
                 const Divider(),
                 ListTile(
                   leading: const Icon(Icons.logout),
-                  title: const Text("Sair"),
+                  title: Text("logout".tr),
                   onTap: () {
                     authService.logout();
                     Get.offAllNamed(

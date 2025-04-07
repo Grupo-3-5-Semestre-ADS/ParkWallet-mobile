@@ -12,6 +12,7 @@ class AppTranslations extends Translations {
       'forgot_password': 'Esqueceu a senha?',
       'login_in': 'Entrar',
       'sign_in': 'Cadastrar-se',
+      'logout': 'Sair',
 
       // Novas traduções
       'full_name': 'Nome Completo',
@@ -48,6 +49,7 @@ class AppTranslations extends Translations {
       'insert_amount': 'Insira um valor',
       'valid_amount_warning': 'Insira um valor válido.',
       'oops': 'Oops',
+
     },
     'en_US': {
       'hello': 'Hello!',
@@ -58,6 +60,8 @@ class AppTranslations extends Translations {
       'forgot_password': 'Forgot password?',
       'login_in': 'Log In',
       'sign_in': 'Sign Up',
+      'logout': 'Logout',
+
 
       // New translations
       'full_name': 'Full Name',
@@ -104,6 +108,8 @@ class AppTranslations extends Translations {
       'forgot_password': '¿Olvidaste tu contraseña?',
       'login_in': 'Iniciar sesión',
       'sign_in': 'Registrarse',
+      'logout': 'Cerrar sesión',
+
 
       // Nuevas traducciones
       'full_name': 'Nombre completo',

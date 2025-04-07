@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:park_wallet/constants/app_colors.dart';
 import 'package:park_wallet/pages/home/controllers/home_credit_controller.dart';
 import 'package:park_wallet/pages/home/controllers/home_history_controller.dart';
 import 'package:park_wallet/pages/home/widgets/credit_card.dart';
@@ -27,14 +25,14 @@ class HomePage extends StatelessWidget {
   Widget _body(BuildContext context) {
     return Stack(
       children: [
+
         WaveBackground(opaque: true),
+
         Column(
           children: [
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-
                 child: CreditCard(creditCtrl: Get.find<HomeCreditController>())
-
             ),
             Expanded(
               child: Padding(

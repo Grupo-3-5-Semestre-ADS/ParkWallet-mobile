@@ -32,7 +32,7 @@ class WaveBackground extends StatelessWidget {
         ),
 
         if (true) Container(
-          color: AppColors.white.withAlpha(opaque ? 200 : 0),
+          color: opaque ? AppColors.very_light_grey.withAlpha(220) : Colors.transparent,
         ),
       ],
     );
