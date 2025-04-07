@@ -6,6 +6,7 @@ import 'package:park_wallet/global/language_controller.dart';
 import 'package:park_wallet/pages/login/controllers/login_controller.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
 import 'package:park_wallet/pages/widgets/language_selector_button.dart';
+import 'package:park_wallet/pages/widgets/wave_background.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -13,31 +14,10 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _loginCtrl = Get.find<LoginController>();
-    final _languageCtrl = Get.find<LanguageController>();
 
     return Stack(
       children: [
-        Container(color: AppColors.white),
-
-        // SVG waves no fundo
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            height: 150,
-            width: double.infinity,
-            child: FittedBox(
-              fit: BoxFit.fill,
-              alignment: Alignment.bottomCenter,
-              child: SvgPicture.asset(
-                'assets/images/bottom_waves.svg',
-                width: MediaQuery.of(context).size.width,
-              ),
-            ),
-          ),
-        ),
-
-        // Botão de idioma no canto superior direito
-
+        WaveBackground(),
         // Formulário
         Scaffold(
           backgroundColor: Colors.transparent,
@@ -106,6 +86,7 @@ class LoginPage extends StatelessWidget {
                       onPressed: _loginCtrl.login,
                       backgroundColor: AppColors.sapphire,
                       textColor: Colors.white,
+                      width: 300,
                     ),
 
                     const SizedBox(height: 12),
@@ -115,6 +96,7 @@ class LoginPage extends StatelessWidget {
                       onPressed: _loginCtrl.register,
                       backgroundColor: AppColors.muted_blue,
                       textColor: Colors.white,
+                      width: 300,
                     ),
 
                     const SizedBox(height: 40),
