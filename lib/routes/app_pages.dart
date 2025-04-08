@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:park_wallet/pages/history/history_binding.dart';
+import 'package:park_wallet/pages/history/history_page.dart';
 import 'package:park_wallet/pages/home/home_binding.dart';
 import 'package:park_wallet/pages/home/home_page.dart';
 import 'package:park_wallet/pages/login/login_page.dart';
@@ -23,6 +25,12 @@ class AppPages {
       name: Routes.HOME,
       page: () => const HomePage(),
       binding: HomeBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: Routes.HISTORY,
+      page: () => const HistoryPage(),
+      binding: HistoryBinding(),
       middlewares: [AuthMiddleware()],
     ),
   ];

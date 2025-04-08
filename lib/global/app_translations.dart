@@ -50,6 +50,9 @@ class AppTranslations extends Translations {
       'valid_amount_warning': 'Insira um valor válido.',
       'oops': 'Oops',
 
+      'search_transactions': 'Pesquisar transações',
+      'load_more': 'Carregar mais',
+      'no_transactions': 'Nenhuma transação encontrada',
     },
     'en_US': {
       'hello': 'Hello!',
@@ -98,6 +101,12 @@ class AppTranslations extends Translations {
       'insert_amount': 'Enter an amount',
       'valid_amount_warning': 'Please enter a valid amount.',
       'oops': 'Oops',
+
+
+      'search_transactions': 'Search transactions',
+      'load_more': 'Load more',
+      'no_transactions': 'No transactions found',
+
     },
     'es_ES': {
       'hello': '¡Hola!',
@@ -146,6 +155,10 @@ class AppTranslations extends Translations {
       'insert_amount': 'Ingresa un valor',
       'valid_amount_warning': 'Ingresa un valor válido.',
       'oops': 'Uy',
+
+      'search_transactions': 'Buscar transacciones',
+      'load_more': 'Cargar más',
+      'no_transactions': 'No se encontraron transacciones',
 
     },
   };

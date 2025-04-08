@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
 import 'package:park_wallet/pages/home/controllers/home_history_controller.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
-import 'purchase_item_tile.dart';
-import 'added_balance_tile.dart';
+import '../../widgets/purchase_item_tile.dart';
+import '../../widgets/added_balance_tile.dart';
 
 class HistoryCard extends StatelessWidget {
   final HomeHistoryController historyController;
@@ -25,21 +25,18 @@ class HistoryCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            // Estimativa de altura por item (ListTile ~ 64px + divider)
             const itemHeight = 70.0;
+            const headerHeight = 50.0;
 
-            // Altura ocupada pelo título e botão
-            const headerAndButtonHeight = 50.0 + 12.0 + 12.0 + 40.0; // Título, espaçamentos e botão
-
-            final availableHeight = constraints.maxHeight - headerAndButtonHeight;
+            final availableHeight = constraints.maxHeight - headerHeight;
             final maxItems = availableHeight ~/ itemHeight;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 Text(
+                Text(
                   "transaction_history".tr,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
                 Obx(() {
@@ -62,13 +59,15 @@ class HistoryCard extends StatelessWidget {
                     },
                   );
                 }),
-                const SizedBox(height: 12),
+                const Spacer(), // <- Isso empurra o botão para o fim
                 Align(
                   alignment: Alignment.center,
                   child: AppButton(
                     label: "see_more".tr,
                     backgroundColor: AppColors.muted_blue,
-                    onPressed: historyController.seeMore,
+                    onPressed: () {
+                      Get.toNamed('/history');
+                    },
                     icon: Icons.add,
                     iconPosition: IconPosition.start,
                     width: 150,
