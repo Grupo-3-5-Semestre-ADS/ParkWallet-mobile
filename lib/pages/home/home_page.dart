@@ -31,12 +31,12 @@ class HomePage extends StatelessWidget {
         Column(
           children: [
             Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
                 child: CreditCard(creditCtrl: Get.find<HomeCreditController>())
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
                 child: HistoryCard(historyController: Get.find<HomeHistoryController>()),
               ),
             ),
