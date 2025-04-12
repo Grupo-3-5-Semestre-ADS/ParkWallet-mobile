@@ -53,6 +53,8 @@ class AppTranslations extends Translations {
       'search_transactions': 'Pesquisar transações',
       'load_more': 'Carregar mais',
       'no_transactions': 'Nenhuma transação encontrada',
+      'search_stores': 'Pesquisar lojas',
+      'no_stores_found': 'Nenhuma loja encontrada',
     },
     'en_US': {
       'hello': 'Hello!',
@@ -106,6 +108,8 @@ class AppTranslations extends Translations {
       'search_transactions': 'Search transactions',
       'load_more': 'Load more',
       'no_transactions': 'No transactions found',
+      'search_stores': 'Search stores',
+      'no_stores_found': 'No stores found',
 
     },
     'es_ES': {
@@ -148,6 +152,19 @@ class AppTranslations extends Translations {
 
       'added_balance': 'Saldo añadido',
       'my_balance': 'Mi saldo',
+      'pay': 'Pagar',
+      'recharge': 'Recargar',
+      'transaction_history': 'Historial de Transacciones',
+      'see_more': 'Ver más',
+      'insert_amount': 'Ingresa un monto',
+      'valid_amount_warning': 'Por favor ingresa un monto válido.',
+      'oops': 'Ups',
+
+      'search_transactions': 'Buscar transacciones',
+      'load_more': 'Cargar más',
+      'no_transactions': 'No se encontraron transacciones',
+      'search_stores': 'Buscar tiendas',
+      'no_stores_found': 'No se encontraron tiendas',
       'pay': 'Pagar',
       'recharge': 'Recargar',
       'transaction_history': 'Historial de transacciones',
