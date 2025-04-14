@@ -1,0 +1,216 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:park_wallet/constants/app_colors.dart';
+import 'package:park_wallet/data/models/product.dart';
+import 'package:park_wallet/pages/stores/controllers/store_detail_controller.dart';
+import 'package:park_wallet/pages/widgets/app_button.dart';
+import 'package:park_wallet/pages/widgets/common_app_bar.dart';
+import 'package:park_wallet/pages/widgets/common_bottom_navigation_bar.dart';
+import 'package:park_wallet/pages/widgets/common_drawer.dart';
+import 'package:park_wallet/pages/widgets/wave_background.dart';
+
+class StoreDetailPage extends StatelessWidget {
+  const StoreDetailPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<StoreDetailController>();
+
+    return Scaffold(
+      appBar: CommonAppBar(),
+      drawer: CommonDrawer(),
+      body: Stack(
+        children: [
+          WaveBackground(opaque: true),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Nome da loja centralizado
+                  Center(
+                    child: Text(
+                      controller.store.value.name,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Tipo da loja centralizado
+                  Center(
+                    child: Text(
+                      controller.store.value.type,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Imagem da loja centralizada e maior
+                  Center(
+                    child: controller.store.value.image != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              controller.store.value.image!,
+                              width: 200,
+                              height: 150,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(
+                            width: 200,
+                            height: 150,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              Icons.store,
+                              size: 80,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                  ),
+                  // Descrição da loja logo abaixo da foto
+                  if (controller.store.value.description != null) ...[  
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        controller.store.value.description!,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[800],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 16),
+                  // Botão Ver no Mapa centralizado
+                  Center(
+                    child: AppButton(
+                      label: 'view_on_map'.tr,
+                      onPressed: controller.viewOnMap,
+                      icon: Icons.map,
+                      iconPosition: IconPosition.start,
+                      backgroundColor: AppColors.sapphire,
+                      width: 200,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Título da seção de cardápio
+                  Center(
+                    child: Text(
+                      'products'.tr,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Expanded(
+                    child: Obx(() {
+                      if (controller.isLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (controller.products.isEmpty) {
+                        return Center(
+                          child: Text('no_products_available'.tr),
+                        );
+                      }
+
+                      return ListView.builder(
+                        itemCount: controller.products.length,
+                        itemBuilder: (context, index) {
+                          final product = controller.products[index];
+                          return _buildProductItem(product, controller);
+                        },
+                      );
+                    }),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: CommonBottomNavigationBar(currentRoute: "/stores"),
+    );
+  }
+
+  Widget _buildProductItem(Product product, StoreDetailController controller) {
+    // Função para determinar o ícone apropriado para representar produtos
+    IconData getProductIcon(String productName) {
+      // Usando o ícone de hambúrguer/comida para representar todos os produtos
+      return Icons.fastfood;
+    }
+    
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            // Ícone do produto com estilo padronizado
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                getProductIcon(product.name),
+                size: 30,
+                color: Colors.grey[700],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'R\$ ${product.price.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[700],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

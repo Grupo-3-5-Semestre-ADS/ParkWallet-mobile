@@ -55,6 +55,9 @@ class AppTranslations extends Translations {
       'no_transactions': 'Nenhuma transação encontrada',
       'search_stores': 'Pesquisar lojas',
       'no_stores_found': 'Nenhuma loja encontrada',
+      'view_on_map': 'Localizar no Mapa',
+      'products': 'Cardápio',
+      'no_products_available': 'Nenhum item disponível no cardápio',
     },
     'en_US': {
       'hello': 'Hello!',
@@ -110,6 +113,9 @@ class AppTranslations extends Translations {
       'no_transactions': 'No transactions found',
       'search_stores': 'Search stores',
       'no_stores_found': 'No stores found',
+      'view_on_map': 'Locate on Map',
+      'products': 'Menu',
+      'no_products_available': 'No items available on menu',
 
     },
     'es_ES': {
@@ -165,6 +171,9 @@ class AppTranslations extends Translations {
       'no_transactions': 'No se encontraron transacciones',
       'search_stores': 'Buscar tiendas',
       'no_stores_found': 'No se encontraron tiendas',
+      'view_on_map': 'Localizar en el Mapa',
+      'products': 'Menú',
+      'no_products_available': 'No hay elementos disponibles en el menú',
       'pay': 'Pagar',
       'recharge': 'Recargar',
       'transaction_history': 'Historial de transacciones',
