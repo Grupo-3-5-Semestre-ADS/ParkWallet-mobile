@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:park_wallet/data/models/store.dart';
+import 'package:park_wallet/constants/app_colors.dart';
 
 class StoreItemTile extends StatelessWidget {
   final Store item;
@@ -12,9 +13,29 @@ class StoreItemTile extends StatelessWidget {
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-      leading: item.image != null
-          ? Image.asset(item.image!, width: 36, height: 36)
-          : const Icon(Icons.store, size: 28),
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: item.image != null
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  item.image!,
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.cover,
+                ),
+              )
+            : Icon(
+                Icons.store,
+                size: 24,
+                color: Colors.grey[700],
+              ),
+      ),
       title: Text(
         item.name,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
@@ -26,7 +47,7 @@ class StoreItemTile extends StatelessWidget {
         style: const TextStyle(fontSize: 11),
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[700]),
       onTap: onTap,
     );
   }

@@ -70,6 +70,7 @@ flutter:
     - assets/images/brasil-circle-flag.png
     - assets/images/spain-circle-flag.png
     - assets/images/uk-circle-flag.png
+    - assets/images/pamonha.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

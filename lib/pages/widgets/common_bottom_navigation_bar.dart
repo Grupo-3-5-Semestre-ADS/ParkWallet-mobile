@@ -20,23 +20,23 @@ class CommonBottomNavigationBar extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.pin_drop),
+          icon: Icon(Icons.pin_drop, color: Colors.grey[700]),
           label: 'map'.tr,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.store),
+          icon: Icon(Icons.store, color: Colors.grey[700]),
           label: 'stores'.tr,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.add_circle_outline),
+          icon: Icon(Icons.add_circle_outline, color: Colors.grey[700]),
           label: 'home'.tr,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.list),
+          icon: Icon(Icons.list, color: Colors.grey[700]),
           label: 'history'.tr,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
+          icon: Icon(Icons.notifications, color: Colors.grey[700]),
           label: 'news'.tr,
         ),
       ],

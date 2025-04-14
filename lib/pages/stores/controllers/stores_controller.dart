@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:park_wallet/data/models/store.dart';
+import 'package:park_wallet/routes/app_pages.dart';
 
 class StoresController extends GetxController {
   final RxList<Store> _allStores = <Store>[].obs;
@@ -98,12 +99,7 @@ class StoresController extends GetxController {
   }
 
   void navigateToStoreDetail(Store store) {
-    // Implementar navegação para a tela de detalhes da loja
-    // Get.toNamed('/store-detail', arguments: store);
-    Get.snackbar(
-      'Funcionalidade em desenvolvimento',
-      'Detalhes da loja ${store.name} serão implementados em breve.',
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    // Navegar para a tela de detalhes da loja
+    Get.toNamed(Routes.STORE_DETAIL, arguments: store);
   }
 }
