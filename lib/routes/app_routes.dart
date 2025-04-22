@@ -7,5 +7,5 @@ abstract class Routes {
   static const HISTORY = '/history';
   static const STORES = '/stores';
   static const STORE_DETAIL = '/store-detail';
-
+  static const CHAT = '/news';
 }

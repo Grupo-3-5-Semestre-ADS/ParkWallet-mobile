@@ -38,7 +38,17 @@ class AppTranslations extends Translations {
       'stores': 'Lojas',
       'home': 'Início',
       'history': 'Histórico',
-      'news': 'Novidades',
+      'news': 'Chat',
+
+      // Chat translations
+      'chat': 'Chat',
+      'online': 'Online',
+      'offline': 'Offline',
+      'no_messages_yet': 'Ainda não há mensagens',
+      'connect': 'Conectar',
+      'type_message': 'Digite uma mensagem...',
+      'gallery': 'Galeria',
+      'camera': 'Câmera',
 
       'added_balance': 'Saldo adicionado',
       'my_balance': 'Meu saldo',
@@ -70,7 +80,6 @@ class AppTranslations extends Translations {
       'sign_in': 'Sign Up',
       'logout': 'Logout',
 
-
       // New translations
       'full_name': 'Full Name',
       'full_name_hint': 'Enter your full name',
@@ -95,7 +104,17 @@ class AppTranslations extends Translations {
       'stores': 'Stores',
       'home': 'Home',
       'history': 'History',
-      'news': 'News',
+      'news': 'Chat',
+
+      // Chat translations
+      'chat': 'Chat',
+      'online': 'Online',
+      'offline': 'Offline',
+      'no_messages_yet': 'No messages yet',
+      'connect': 'Connect',
+      'type_message': 'Type a message...',
+      'gallery': 'Gallery',
+      'camera': 'Camera',
 
       'added_balance': 'Added Balance',
       'my_balance': 'My Balance',
@@ -107,7 +126,6 @@ class AppTranslations extends Translations {
       'valid_amount_warning': 'Please enter a valid amount.',
       'oops': 'Oops',
 
-
       'search_transactions': 'Search transactions',
       'load_more': 'Load more',
       'no_transactions': 'No transactions found',
@@ -116,7 +134,6 @@ class AppTranslations extends Translations {
       'view_on_map': 'Locate on Map',
       'products': 'Menu',
       'no_products_available': 'No items available on menu',
-
     },
     'es_ES': {
       'hello': '¡Hola!',
@@ -128,7 +145,6 @@ class AppTranslations extends Translations {
       'login_in': 'Iniciar sesión',
       'sign_in': 'Registrarse',
       'logout': 'Cerrar sesión',
-
 
       // Nuevas traducciones
       'full_name': 'Nombre completo',
@@ -154,7 +170,17 @@ class AppTranslations extends Translations {
       'stores': 'Tiendas',
       'home': 'Inicio',
       'history': 'Historial',
-      'news': 'Novedades',
+      'news': 'Chat',
+
+      // Chat translations
+      'chat': 'Chat',
+      'online': 'En línea',
+      'offline': 'Desconectado',
+      'no_messages_yet': 'Aún no hay mensajes',
+      'connect': 'Conectar',
+      'type_message': 'Escribe un mensaje...',
+      'gallery': 'Galería',
+      'camera': 'Cámara',
 
       'added_balance': 'Saldo añadido',
       'my_balance': 'Mi saldo',
@@ -162,9 +188,9 @@ class AppTranslations extends Translations {
       'recharge': 'Recargar',
       'transaction_history': 'Historial de Transacciones',
       'see_more': 'Ver más',
-      'insert_amount': 'Ingresa un monto',
-      'valid_amount_warning': 'Por favor ingresa un monto válido.',
-      'oops': 'Ups',
+      'insert_amount': 'Ingresa un valor',
+      'valid_amount_warning': 'Ingresa un valor válido.',
+      'oops': 'Uy',
 
       'search_transactions': 'Buscar transacciones',
       'load_more': 'Cargar más',
@@ -174,18 +200,6 @@ class AppTranslations extends Translations {
       'view_on_map': 'Localizar en el Mapa',
       'products': 'Menú',
       'no_products_available': 'No hay elementos disponibles en el menú',
-      'pay': 'Pagar',
-      'recharge': 'Recargar',
-      'transaction_history': 'Historial de transacciones',
-      'see_more': 'Ver más',
-      'insert_amount': 'Ingresa un valor',
-      'valid_amount_warning': 'Ingresa un valor válido.',
-      'oops': 'Uy',
-
-      'search_transactions': 'Buscar transacciones',
-      'load_more': 'Cargar más',
-      'no_transactions': 'No se encontraron transacciones',
-
     },
   };
 }

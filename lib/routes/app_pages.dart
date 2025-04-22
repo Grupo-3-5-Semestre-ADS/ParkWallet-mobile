@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:park_wallet/pages/chat/chat_binding.dart';
+import 'package:park_wallet/pages/chat/chat_page.dart';
 import 'package:park_wallet/pages/history/history_binding.dart';
 import 'package:park_wallet/pages/history/history_page.dart';
 import 'package:park_wallet/pages/home/home_binding.dart';
@@ -47,6 +49,12 @@ class AppPages {
       name: Routes.STORE_DETAIL,
       page: () => const StoreDetailPage(),
       binding: StoreDetailBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: Routes.CHAT,
+      page: () => const ChatPage(),
+      binding: ChatBinding(),
       middlewares: [AuthMiddleware()],
     ),
   ];
