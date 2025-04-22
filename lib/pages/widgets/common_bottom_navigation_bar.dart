@@ -36,7 +36,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
           label: 'history'.tr,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications, color: Colors.grey[700]),
+          icon: Icon(Icons.chat_rounded, color: Colors.grey[700]),
           label: 'news'.tr,
         ),
       ],

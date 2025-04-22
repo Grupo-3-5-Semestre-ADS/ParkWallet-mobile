@@ -45,5 +45,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- Permission descriptions for the chat feature -->
+	<key>NSCameraUsageDescription</key>
+	<string>Access to your camera is needed to take photos for the chat</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access to your photo library is needed to send images in the chat</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Access to your microphone may be needed when taking videos for the chat</string>
 </dict>
 </plist>
