@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:park_wallet/constants/endpoints.dart';
 import 'package:park_wallet/data/dto/login_request.dart';
+import 'package:park_wallet/data/dto/user_register_request.dart';
+import 'package:park_wallet/services/auth_service.dart';
 
 class AuthRepository {
 
@@ -31,28 +33,24 @@ class AuthRepository {
     }
   }
 
-  Future<String> fetchRegister(LoginRequest requestBody) async {
-    final url = Uri.parse(Endpoints.loginEndpoint);
+  Future<void> fetchRegister(UserRegisterRequest requestBody) async {
+    final url = Uri.parse(Endpoints.registerEndpoint);
 
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(requestBody.toMap()),
-    );
 
-    int status = response.statusCode;
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(requestBody.toMap()),
+      );
 
-    if (status == 200) {
-      final data = jsonDecode(response.body);
-      final token = data['token'];
-      log('Login bem-sucedido! Token: $token');
-      return token;
-    } if (status == 401) {
-      throw Exception('invalid_credentials'.tr);
-    } else {
-      log('Erro ${response.statusCode} ao fazer login: ${response.body}');
-      throw Exception('Erro ao fazer login: ${response.statusCode}');
-    }
+      int statusCode = response.statusCode;
+
+      if ( statusCode == 201) {
+        log('Cadastro de usuário bem-sucedido!');
+      } else {
+        log('Erro ${response.statusCode}: ${response.body}');
+        throw Exception("Erro ${response.statusCode}: ${response.body}");
+      }
   }
 
 }
