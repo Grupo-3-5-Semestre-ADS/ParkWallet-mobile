@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:park_wallet/data/dto/user_register_request.dart';
+import 'package:park_wallet/repositories/auth_repository.dart';
 
 class RegisterController extends GetxController {
   final PageController pageController = PageController();
+  AuthRepository authRepository = AuthRepository();
   RxInt currentPage = 0.obs;
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController cpfCtrl = TextEditingController();
@@ -28,12 +33,29 @@ class RegisterController extends GetxController {
     pageController.previousPage(duration: 300.milliseconds, curve: Curves.ease);
   }
 
-  void register() {
+  void register() async {
     if (validateSecondPage()) {
-      Get.snackbar('Sucesso', 'Conta criada com sucesso!');
-      Get.offNamed('/login');
+      final request = UserRegisterRequest(
+        name: nameCtrl.text.trim(),
+        cpf: cpfCtrl.text.replaceAll(RegExp(r'\D'), ''),
+        birthDate: _formatBirthdate(dateCtrl.text.trim()),
+        email: emailCtrl.text.trim(),
+        password: passwordCtrl.text,
+      );
+
+      try {
+        await authRepository.fetchRegister(request);
+        Get.snackbar('Sucesso', 'Conta criada com sucesso!');
+        Get.offNamed('/login');
+      } catch (e) {
+        Get.snackbar('Erro', 'Não foi possível criar a conta');
+
+        log('Erro no register(): $e');
+      }
     }
   }
+
+
 
 
   void cancel(){
@@ -99,6 +121,11 @@ class RegisterController extends GetxController {
     }
 
     return true;
+  }
+
+  String _formatBirthdate(String date) {
+    final parts = date.split('/');
+    return '${parts[2]}-${parts[1]}-${parts[0]}';
   }
 
 
