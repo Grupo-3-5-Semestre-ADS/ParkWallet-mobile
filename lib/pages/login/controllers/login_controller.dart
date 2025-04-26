@@ -1,20 +1,33 @@
+import "dart:developer";
+
 import "package:flutter/material.dart";
 import "package:get/get.dart";
-import "package:park_wallet/repositories/login_repository.dart";
+import "package:park_wallet/data/dto/login_request.dart";
+import "package:park_wallet/repositories/auth_repository.dart";
 import "package:park_wallet/services/auth_service.dart";
 
 class LoginController extends GetxController {
 
-  final LoginRepository loginRepo = LoginRepository();
+  final AuthRepository authRepo = AuthRepository();
 
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
 
-  void login() {
-    print("email: ${emailCtrl.text}");
-    print("senha: ${passwordCtrl.text}");
-    final authService = Get.find<AuthService>();
-    authService.saveToken('token-jwt-falso');
+  Future<void> login() async {
+    String token;
+    String email = emailCtrl.text;
+    String password = passwordCtrl.text;
+    LoginRequest loginRequest = LoginRequest(email: email, password: password);
+
+    try {
+      token = await authRepo.fetchLogin(loginRequest);
+    } catch (e) {
+      log(e.toString());
+      return;
+    }
+    emailCtrl.text = "";
+    passwordCtrl.text = "";
+    Get.find<AuthService>().saveToken(token);
     Get.offAllNamed('/home');
   }
 
@@ -27,6 +40,7 @@ class LoginController extends GetxController {
     emailCtrl.text = "";
     passwordCtrl.text = "";
   }
+
   @override
   void dispose() {
     emailCtrl.dispose();

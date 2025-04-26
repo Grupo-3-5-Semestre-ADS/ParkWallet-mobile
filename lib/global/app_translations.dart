@@ -13,6 +13,7 @@ class AppTranslations extends Translations {
       'login_in': 'Entrar',
       'sign_in': 'Cadastrar-se',
       'logout': 'Sair',
+      'invalid_credentials': 'Credenciais inválidas',
 
       // Novas traduções
       'full_name': 'Nome Completo',
@@ -79,6 +80,7 @@ class AppTranslations extends Translations {
       'login_in': 'Log In',
       'sign_in': 'Sign Up',
       'logout': 'Logout',
+      'invalid_credentials': 'Invalid credentials',
 
       // New translations
       'full_name': 'Full Name',
@@ -145,6 +147,7 @@ class AppTranslations extends Translations {
       'login_in': 'Iniciar sesión',
       'sign_in': 'Registrarse',
       'logout': 'Cerrar sesión',
+      'invalid_credentials': 'credenciales inválidas',
 
       // Nuevas traducciones
       'full_name': 'Nombre completo',

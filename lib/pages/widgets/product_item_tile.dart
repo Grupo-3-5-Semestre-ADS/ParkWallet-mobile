@@ -14,7 +14,7 @@ class ProductItemTile extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 12),
       leading: item.image != null
           ? Image.asset(item.image!, width: 36, height: 36)
-          : const Icon(Icons.fastfood, size: 28, color: Colors.grey[700]),
+          : Icon(Icons.fastfood, size: 28, color: Colors.grey[700]),
       title: Text(
         item.name,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
@@ -27,7 +27,7 @@ class ProductItemTile extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
       ),
       trailing: onTap != null
-          ? const Icon(Icons.add_shopping_cart, size: 20, color: Colors.grey[700])
+          ? Icon(Icons.add_shopping_cart, size: 20, color: Colors.grey[700])
           : null,
       onTap: onTap,
     );
