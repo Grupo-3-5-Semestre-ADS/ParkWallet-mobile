@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:park_wallet/global/language_controller.dart';
+import 'package:park_wallet/routes/app_pages.dart';
 import 'package:park_wallet/services/auth_service.dart';
+import 'package:park_wallet/services/profile_service.dart';
 
 class CommonDrawer extends StatelessWidget {
-  const CommonDrawer({Key? key}) : super(key: key);
+
+  CommonDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
     final AuthService authService = AuthService();
+    final ProfileService profileService = ProfileService();
+
     final LanguageController languageController =
         Get.find<LanguageController>();
 
@@ -17,35 +22,57 @@ class CommonDrawer extends StatelessWidget {
         children: [
           DrawerHeader(
             decoration: const BoxDecoration(color: Colors.blue),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Obx(
-                  () => CircleAvatar(
-                    radius: 40,
-                    backgroundImage: AssetImage(
-                      languageController.flagImagePath.value,
+            child: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Obx(() => CircleAvatar(
+                      radius: 35,
+                      backgroundImage: AssetImage(languageController.flagImagePath.value),
+                    )),
+                    const SizedBox(height: 10),
+                    Text(
+                      'welcome'.tr,
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
-                  ),
+                    Text(
+                      profileService.userProfile?.name.split(" ").first ?? '',
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10),
-                 Text(
-                    'welcome'.tr,
-                    style: const TextStyle(fontSize: 18, color: Colors.white),
-                  )
-
-              ],
+              ),
             ),
           ),
+
           Expanded(
             child: ListView(
               children: [
                 ListTile(
+                  leading: const Icon(Icons.pin_drop),
+                  title: Text('map'.tr),
+                  onTap: () => Get.offNamed(Routes.MAP),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.store),
+                  title: Text('stores'.tr),
+                  onTap: () => Get.offNamed(Routes.STORES),
+                ),
+                ListTile(
                   leading: const Icon(Icons.home),
-                  title: Text("home".tr),
-                  onTap: () {
-                    Get.offNamed('/home'); // Navegar para a tela inicial
-                  },
+                  title: Text('home'.tr),
+                  onTap: () => Get.offNamed(Routes.HOME),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.list),
+                  title: Text('history'.tr),
+                  onTap: () => Get.offNamed(Routes.HISTORY),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.chat_rounded),
+                  title: Text('news'.tr),
+                  onTap: () => Get.offNamed(Routes.CHAT),
                 ),
                 const Divider(),
                 ListTile(
@@ -55,7 +82,7 @@ class CommonDrawer extends StatelessWidget {
                     authService.logout();
                     Get.offAllNamed(
                       '/login',
-                    ); // Redirecionar para a tela de login
+                    );
                   },
                 ),
               ],

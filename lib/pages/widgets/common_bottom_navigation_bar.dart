@@ -28,7 +28,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
           label: 'stores'.tr,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.add_circle_outline, color: Colors.grey[700]),
+          icon: Icon(Icons.home, color: Colors.grey[700]),
           label: 'home'.tr,
         ),
         BottomNavigationBarItem(
@@ -37,7 +37,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.chat_rounded, color: Colors.grey[700]),
-          label: 'news'.tr,
+          label: 'chat'.tr,
         ),
       ],
     );
@@ -53,7 +53,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
         return 2;
       case '/history':
         return 3;
-      case '/news':
+      case '/chat':
         return 4;
       default:
         return 2;
