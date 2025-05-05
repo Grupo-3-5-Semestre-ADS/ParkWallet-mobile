@@ -6,12 +6,14 @@ import 'package:park_wallet/global/language_controller.dart';
 import 'package:park_wallet/pages/login/controllers/login_controller.dart';
 import 'package:park_wallet/routes/app_pages.dart';
 import 'package:park_wallet/services/auth_service.dart';
+import 'package:park_wallet/services/profile_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put<LanguageController>(LanguageController());
   Get.put<LoginController>(LoginController());
   await Get.putAsync(() => AuthService().init());
+  await Get.putAsync(() => ProfileService().init());
 
   runApp(const MyApp());
 }

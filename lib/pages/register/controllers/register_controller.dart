@@ -14,11 +14,8 @@ class RegisterController extends GetxController {
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
   TextEditingController repeatPasswordCtrl = TextEditingController();
-
   TextEditingController dateCtrl = TextEditingController();
   Rx<DateTime> selectedDate = DateTime.now().obs;
-
-
 
   void nextPage() {
     if (validateFirstPage()) {
@@ -26,7 +23,6 @@ class RegisterController extends GetxController {
       pageController.nextPage(duration: 300.milliseconds, curve: Curves.ease);
     }
   }
-
 
   void prevPage() {
     currentPage.value = 0;
@@ -48,15 +44,11 @@ class RegisterController extends GetxController {
         Get.snackbar('Sucesso', 'Conta criada com sucesso!');
         Get.offNamed('/login');
       } catch (e) {
-        Get.snackbar('Erro', 'Não foi possível criar a conta');
-
+        Get.snackbar('Erro', 'Não foi possível criar a conta: $e');
         log('Erro no register(): $e');
       }
     }
   }
-
-
-
 
   void cancel(){
     Get.offNamed('/login');

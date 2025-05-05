@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
-import 'package:park_wallet/global/language_controller.dart';
 import 'package:park_wallet/pages/login/controllers/login_controller.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
 import 'package:park_wallet/pages/widgets/language_selector_button.dart';
@@ -55,6 +53,7 @@ class LoginPage extends StatelessWidget {
                     TextField(
                       controller: _loginCtrl.passwordCtrl,
                       obscureText: true,
+
                       decoration: InputDecoration(
                         labelText: 'password'.tr,
                         hintText: 'insert_password'.tr,

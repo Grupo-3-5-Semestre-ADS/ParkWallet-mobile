@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:park_wallet/constants/endpoints.dart';
 import 'package:park_wallet/data/dto/login_request.dart';
 import 'package:park_wallet/data/dto/user_register_request.dart';
-import 'package:park_wallet/services/auth_service.dart';
+import 'package:park_wallet/global/custom_exception.dart';
 
 class AuthRepository {
 
@@ -26,16 +26,15 @@ class AuthRepository {
       log('Login bem-sucedido! Token: $token');
       return token;
     } if (status == 401) {
-      throw Exception('invalid_credentials'.tr);
+      throw CustomException('invalid_credentials'.tr);
     } else {
       log('Erro ${response.statusCode} ao fazer login: ${response.body}');
-      throw Exception('Erro ao fazer login: ${response.statusCode}');
+      throw CustomException('Erro ao fazer login: ${response.statusCode}');
     }
   }
 
   Future<void> fetchRegister(UserRegisterRequest requestBody) async {
     final url = Uri.parse(Endpoints.registerEndpoint);
-
 
       final response = await http.post(
         url,
@@ -49,7 +48,7 @@ class AuthRepository {
         log('Cadastro de usuário bem-sucedido!');
       } else {
         log('Erro ${response.statusCode}: ${response.body}');
-        throw Exception("Erro ${response.statusCode}: ${response.body}");
+        throw CustomException("Erro ${response.statusCode}: ${response.body}");
       }
   }
 

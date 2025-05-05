@@ -14,7 +14,7 @@ class ChatPage extends GetView<ChatController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildCustomAppBar(context),
-      drawer: const CommonDrawer(),
+      drawer: CommonDrawer(),
       body: Column(
         children: [
           _buildConnectionStatusBar(),

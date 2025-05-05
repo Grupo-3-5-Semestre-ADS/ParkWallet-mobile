@@ -4,7 +4,6 @@ class UserRegisterRequest {
   final String birthDate;
   final String email;
   final String password;
-
   UserRegisterRequest({
     required this.name,
     required this.cpf,
