@@ -8,4 +8,6 @@ class Endpoints {
   static const profileEndpoint = "$uriServidor/api/users/{id}";
   static const balanceEndpoint = "$uriServidor/api/wallets/{id}";
   static const paymentEndpoint = "$uriServidor/api/payment/{id}";
+
+  static const historyEndpoint = "$uriServidor/api/users/{id}/transactions-with-items";
 }
