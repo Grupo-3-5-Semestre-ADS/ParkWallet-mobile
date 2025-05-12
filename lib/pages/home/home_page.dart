@@ -23,27 +23,39 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _body(BuildContext context) {
+    final creditCtrl = Get.find<HomeCreditController>();
+    final historyCtrl = Get.find<HomeHistoryController>();
+
     return Stack(
       children: [
-
         WaveBackground(opaque: true),
-
-        Column(
-          children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-                child: CreditCard(creditCtrl: Get.find<HomeCreditController>())
+        RefreshIndicator(
+          onRefresh: () async {
+            await creditCtrl.loadBalance();
+            // await historyCtrl.loadHistory(); // Se tiver
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+                  child: CreditCard(creditCtrl: creditCtrl),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6, // Altura visível p/ histórico
+                    child: HistoryCard(historyController: historyCtrl),
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
-                child: HistoryCard(historyController: Get.find<HomeHistoryController>()),
-              ),
-            ),
-          ],
+          ),
         ),
       ],
     );
   }
+
 
 }
