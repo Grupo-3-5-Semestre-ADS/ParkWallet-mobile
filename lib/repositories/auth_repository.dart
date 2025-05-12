@@ -11,6 +11,7 @@ class AuthRepository {
 
   Future<String> fetchLogin(LoginRequest requestBody) async {
     final url = Uri.parse(Endpoints.loginEndpoint);
+    print("Chegou aqui login!");
 
     final response = await http.post(
       url,
@@ -19,7 +20,7 @@ class AuthRepository {
     );
 
     int status = response.statusCode;
-
+    print("Chegou aqui 2!");
     if (status == 200) {
       final data = jsonDecode(response.body);
       final token = data['token'];

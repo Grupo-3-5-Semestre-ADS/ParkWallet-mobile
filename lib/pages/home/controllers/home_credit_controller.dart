@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:park_wallet/pages/home/widgets/qr_code_scanner_page.dart';
+import 'package:park_wallet/repositories/credit_repository.dart';
 
 class HomeCreditController extends GetxController {
+  CreditRepository creditRepository = CreditRepository();
+
   // Saldo inicial fictício
   final TextEditingController valueController = TextEditingController();
 
-  var balance = 123.43.obs;
+  var balance = 0.0.obs;
+
+  // override
+  @override
+  void onInit() {
+    super.onInit();
+    loadBalance();
+  }
+  //
+  Future<void> loadBalance() async {
+    try {
+      final newBalance = await creditRepository.fetchBalance();
+      print("NewBalance: $newBalance");
+      balance.value = newBalance;
+    } catch (e) {
+      Get.snackbar("Erro", "Não foi possível carregar o saldo");
+    }
+  }
 
   // Simula um pagamento (deduz saldo)
   void pay() {
-    if (balance.value >= 10) {
-      balance.value -= 10;
-    }
+    Get.to(() => QRCodeScannerPage());
   }
 
   // Simula uma recarga (adiciona saldo)
