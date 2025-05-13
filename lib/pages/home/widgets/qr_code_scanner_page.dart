@@ -5,6 +5,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:park_wallet/data/dto/product_payment_request.dart';
 import 'package:park_wallet/pages/home/controllers/home_credit_controller.dart';
 import 'package:park_wallet/repositories/payment_repository.dart';
+import 'package:park_wallet/repositories/product_repository.dart';
 
 class QRCodeScannerPage extends StatelessWidget {
   QRCodeScannerPage({super.key});
@@ -13,7 +14,7 @@ class QRCodeScannerPage extends StatelessWidget {
   final RxBool isProcessing = false.obs;
 
   void _handleScan(BarcodeCapture capture) async {
-    if (isProcessing.value) return; // Ignora múltiplas leituras
+    if (isProcessing.value) return;
     isProcessing.value = true;
 
     final code = capture.barcodes.first.rawValue;
@@ -23,28 +24,92 @@ class QRCodeScannerPage extends StatelessWidget {
       final json = jsonDecode(code);
       final List productsJson = json['products'];
 
-      final products = productsJson.map((item) => ProductPaymentRequest(
-        productId: int.parse(item['productId'].toString()),
-        quantity: int.parse(item['quantity'].toString()),
-      )).toList();
+      final List<ProductPaymentRequest> products = [];
+      final List<Map<String, dynamic>> detailedProducts = [];
 
-      Get.back(); // Fecha o scanner
+      final productRepo = ProductRepository();
 
+      for (var item in productsJson) {
+        final productId = int.parse(item['productId'].toString());
+        final quantity = int.parse(item['quantity'].toString());
+
+        final product = await productRepo.fetchProductById(productId);
+
+        products.add(ProductPaymentRequest(
+          productId: productId,
+          quantity: quantity,
+        ));
+
+        detailedProducts.add({
+          'name': product.name,
+          'price': product.price,
+          'quantity': quantity,
+          'total': product.price * quantity,
+          'facility': product.facility?.name ?? 'Loja desconhecida',
+        });
+      }
+
+      Get.back();
       await Future.delayed(const Duration(milliseconds: 300));
-      await _showConfirmationDialog(products);
+      await _showConfirmationDialog(products, detailedProducts);
     } catch (e) {
       isProcessing.value = false;
       Get.snackbar("Erro", "Erro ao ler dados: $e", snackPosition: SnackPosition.BOTTOM);
     }
   }
 
-  Future<void> _showConfirmationDialog(List<ProductPaymentRequest> products) async {
+  Future<void> _showConfirmationDialog(
+      List<ProductPaymentRequest> products,
+      List<Map<String, dynamic>> detailedProducts,
+      ) async {
+    final totalCompra = detailedProducts.fold<double>(0, (sum, item) => sum + item['total']);
+
     await Get.dialog(
       AlertDialog(
         title: const Text('Confirmar Pagamento'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: products.map((p) => Text('Produto ${p.productId} - Qtd: ${p.quantity}')).toList(),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+
+              ...detailedProducts.map((item) {
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(
+                    item['name'],
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item['facility'],
+                        style: const TextStyle(color: Colors.grey),
+                      ),
+                      Text(
+                        'R\$ ${item['price'].toStringAsFixed(2)} x ${item['quantity']}',
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  trailing: Text(
+                    'R\$ ${item['total'].toStringAsFixed(2)}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                );
+              }),
+
+              const Divider(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Total: R\$ ${totalCompra.toStringAsFixed(2)}',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+            ],
+          ),
         ),
         actions: [
           TextButton(
@@ -56,24 +121,22 @@ class QRCodeScannerPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () async {
-              Get.back(); // Fecha o modal
+              Get.back();
               Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
 
               try {
                 final message = await paymentRepository.fetchPayment(products);
 
-                Get.back(); // Fecha o loading
+                Get.back();
                 Get.snackbar("Sucesso", message, snackPosition: SnackPosition.BOTTOM);
 
-                // Atualiza o saldo
                 final creditCtrl = Get.find<HomeCreditController>();
                 await creditCtrl.loadBalance();
-
               } catch (e) {
-                Get.back(); // Fecha o loading
+                Get.back();
                 Get.snackbar("Erro", e.toString(), snackPosition: SnackPosition.BOTTOM);
               } finally {
-                isProcessing.value = false; // Libera novo scan
+                isProcessing.value = false;
               }
             },
             child: const Text('Confirmar'),
@@ -83,6 +146,7 @@ class QRCodeScannerPage extends StatelessWidget {
       barrierDismissible: false,
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
