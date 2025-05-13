@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
         RefreshIndicator(
           onRefresh: () async {
             await creditCtrl.loadBalance();
-            // await historyCtrl.loadHistory(); // Se tiver
+            await historyCtrl.loadHistory();
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
