@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:park_wallet/data/models/transaction.dart';
+import 'package:park_wallet/data/dto/transaction.dart';
 
 class AddedBalanceTile extends StatelessWidget {
-  final Transaction item;
+  final Transaction transaction;
 
-  const AddedBalanceTile({super.key, required this.item});
+  const AddedBalanceTile({super.key, required this.transaction});
 
   @override
   Widget build(BuildContext context) {
-    final formattedDate = DateFormat('dd/MM/yyyy – HH:mm').format(DateTime.parse(item.dateTime));
+    final formattedDate = DateFormat('dd/MM/yyyy – HH:mm').format(DateTime.parse(transaction.createdAt));
 
     return SizedBox(
       height: 70,
@@ -29,7 +29,7 @@ class AddedBalanceTile extends StatelessWidget {
             style: const TextStyle(fontSize: 12, color: Colors.grey),
           ),
           trailing: Text(
-            "+ R\$${item.price.toStringAsFixed(2)}",
+            "+ R\$${transaction.totalValue.toStringAsFixed(2)}",
             style: const TextStyle(color: Colors.green, fontSize: 14),
           ),
         ),

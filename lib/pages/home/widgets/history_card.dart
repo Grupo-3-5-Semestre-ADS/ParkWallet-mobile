@@ -51,9 +51,9 @@ class HistoryCard extends StatelessWidget {
                     itemBuilder: (_, index) {
                       final item = visibleItems[index];
                       if (item.operation == "purchase") {
-                        return PurchaseItemTile(item: item);
+                        return PurchaseItemTile(transaction: item);
                       } else if (item.operation == "recharge") {
-                        return AddedBalanceTile(item: item);
+                        return AddedBalanceTile(transaction: item);
                       }
                       return const SizedBox.shrink();
                     },
