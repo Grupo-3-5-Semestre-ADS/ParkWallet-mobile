@@ -6,6 +6,7 @@ import 'package:park_wallet/constants/endpoints.dart';
 import 'package:park_wallet/data/models/store.dart';
 import 'package:park_wallet/global/custom_exception.dart';
 import 'package:park_wallet/services/auth_service.dart';
+import 'package:park_wallet/data/models/product.dart';
 
 class StoreRepository {
   final AuthService authService = Get.find<AuthService>();
@@ -20,7 +21,8 @@ class StoreRepository {
       },
     );
     if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      final List<dynamic> data = decoded is List ? decoded : decoded['data'];
       return data.map((json) => Store.fromJson(json)).toList();
     } else if (response.statusCode == 401) {
       await authService.logout();
@@ -49,6 +51,28 @@ class StoreRepository {
     } else {
       log('Erro ${response.statusCode} ao buscar loja: ${response.body}');
       throw CustomException('Erro ao buscar loja: ${response.statusCode}');
+    }
+  }
+
+  Future<List<Product>> fetchStoreProducts(String storeId) async {
+    final url = Uri.parse(Endpoints.storeProductsEndpoint.replaceFirst('{id}', storeId));
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authService.token}',
+      },
+    );
+    if (response.statusCode == 200) {
+      final decoded = jsonDecode(response.body);
+      final List<dynamic> data = decoded is List ? decoded : decoded['data'];
+      return data.map((json) => Product.fromJson(json)).toList();
+    } else if (response.statusCode == 401) {
+      await authService.logout();
+      throw CustomException('Sessão expirada. Faça login novamente.');
+    } else {
+      log('Erro ${response.statusCode} ao buscar produtos da loja: ${response.body}');
+      throw CustomException('Erro ao buscar produtos da loja: ${response.statusCode}');
     }
   }
 }

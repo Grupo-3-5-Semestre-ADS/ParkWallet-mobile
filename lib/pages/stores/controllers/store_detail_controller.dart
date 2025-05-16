@@ -22,11 +22,8 @@ class StoreDetailController extends GetxController {
     try {
       final storeDetail = await storeRepository.fetchStoreById(store.value.id);
       store.value = storeDetail;
-      // Supondo que exista um método para buscar produtos por loja
-      // Caso não exista, mantenha products vazio ou ajuste conforme necessário
-      // Exemplo:
-      // final storeProducts = await productRepository.fetchProductsByStoreId(store.value.id);
-      // products.assignAll(storeProducts);
+      final storeProducts = await storeRepository.fetchStoreProducts(store.value.id);
+      products.assignAll(storeProducts);
     } catch (e) {
       Get.snackbar('Erro', e.toString());
     } finally {

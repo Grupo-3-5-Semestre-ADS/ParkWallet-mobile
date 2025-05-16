@@ -103,13 +103,16 @@ class StoreDetailPage extends StatelessWidget {
                   const SizedBox(height: 16),
                   // Botão Ver no Mapa centralizado
                   Center(
-                    child: AppButton(
-                      label: 'view_on_map'.tr,
-                      onPressed: controller.viewOnMap,
-                      icon: Icons.map,
-                      iconPosition: IconPosition.start,
-                      backgroundColor: AppColors.sapphire,
-                      width: 200,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: AppButton(
+                        label: 'view_on_map'.tr,
+                        onPressed: controller.viewOnMap,
+                        icon: Icons.map,
+                        iconPosition: IconPosition.start,
+                        backgroundColor: AppColors.sapphire,
+                        // width: 200, // Removido para responsividade
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -124,26 +127,47 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Expanded(
-                    child: Obx(() {
-                      if (controller.isLoading.value) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height * 0.35,
+                          minHeight: 0,
+                        ),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Obx(() {
+                            if (controller.isLoading.value) {
+                              return const Center(child: CircularProgressIndicator());
+                            }
 
-                      if (controller.products.isEmpty) {
-                        return Center(
-                          child: Text('no_products_available'.tr),
-                        );
-                      }
+                            if (controller.products.isEmpty) {
+                              return Center(
+                                child: Text('no_products_available'.tr),
+                              );
+                            }
 
-                      return ListView.builder(
-                        itemCount: controller.products.length,
-                        itemBuilder: (context, index) {
-                          final product = controller.products[index];
-                          return _buildProductItem(product, controller);
-                        },
+                            return Scrollbar(
+                              thumbVisibility: true,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: controller.products.length,
+                                itemBuilder: (context, index) {
+                                  final product = controller.products[index];
+                                  return _buildProductItem(product, controller, context);
+                                },
+                              ),
+                            );
+                          }),
+                        ),
                       );
-                    }),
+                    },
                   ),
                 ],
               ),
@@ -155,58 +179,68 @@ class StoreDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildProductItem(Product product, StoreDetailController controller) {
-    // Função para determinar o ícone apropriado para representar produtos
-    IconData getProductIcon(String productName) {
-      // Usando o ícone de hambúrguer/comida para representar todos os produtos
-      return Icons.fastfood;
-    }
-    
+  Widget _buildProductItem(Product product, StoreDetailController controller, BuildContext context, {bool isGrid = false}) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      margin: const EdgeInsets.only(bottom: 12),
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Ícone do produto com estilo padronizado
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                getProductIcon(product.name),
-                size: 30,
-                color: Colors.grey[700],
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+            Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'R\$ ${product.price.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[700],
-                      fontWeight: FontWeight.w500,
-                    ),
+                  child: const Icon(
+                    Icons.fastfood,
+                    size: 28,
+                    color: Colors.grey,
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product.name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        product.description ?? '',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black54,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'R\$ ${product.price.toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

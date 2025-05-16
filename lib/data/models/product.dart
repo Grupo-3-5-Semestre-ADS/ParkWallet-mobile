@@ -14,4 +14,15 @@ class Product {
     this.image,
     this.description,
   });
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'].toString(),
+      name: json['name'] ?? '',
+      price: double.parse(json['price'].toString()),
+      storeId: json['storeId']?.toString() ?? json['facilityId']?.toString() ?? '',
+      image: json['image'],
+      description: json['description'],
+    );
+  }
 }
