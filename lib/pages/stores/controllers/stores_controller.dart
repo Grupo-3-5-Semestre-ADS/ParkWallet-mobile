@@ -9,24 +9,49 @@ class StoresController extends GetxController {
   final RxString searchQuery = ''.obs;
   final StoreRepository storeRepository = StoreRepository();
   final RxBool isLoading = true.obs;
+  int _currentPage = 1;
+  final int _limit = 20;
+  bool _hasMore = true;
+  bool _isFetchingMore = false;
+
   @override
   void onInit() {
     super.onInit();
-    _fetchStores();
+    _fetchStores(reset: true);
     debounce(searchQuery, (_) => _applyFilter(), time: const Duration(milliseconds: 300));
   }
-  Future<void> _fetchStores() async {
+
+  Future<void> _fetchStores({bool reset = false}) async {
+    if (_isFetchingMore) return;
+    _isFetchingMore = true;
+    if (reset) {
+      _currentPage = 1;
+      _hasMore = true;
+      _allStores.clear();
+    }
     isLoading.value = true;
     try {
-      final stores = await storeRepository.fetchStores();
-      _allStores.assignAll(stores);
+      final stores = await storeRepository.fetchStores(page: _currentPage, limit: _limit);
+      if (stores.length < _limit) {
+        _hasMore = false;
+      }
+      _allStores.addAll(stores);
       _applyFilter();
+      _currentPage++;
     } catch (e) {
       Get.snackbar('Erro', e.toString());
     } finally {
       isLoading.value = false;
+      _isFetchingMore = false;
     }
   }
+
+  void loadMoreStores() {
+    if (_hasMore && !_isFetchingMore) {
+      _fetchStores();
+    }
+  }
+
   void _applyFilter() {
     final query = searchQuery.value.toLowerCase();
     if (query.isEmpty) {
@@ -42,6 +67,7 @@ class StoresController extends GetxController {
   }
   void updateSearch(String value) {
     searchQuery.value = value;
+    _fetchStores(reset: true);
   }
   void navigateToStoreDetail(Store store) {
     Get.toNamed(Routes.STORE_DETAIL, arguments: store);

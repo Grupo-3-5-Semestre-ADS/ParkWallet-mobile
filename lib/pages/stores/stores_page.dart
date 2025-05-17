@@ -60,16 +60,24 @@ class StoresPage extends StatelessWidget {
                         return Center(child: Text("no_stores_found".tr));
                       }
 
-                      return ListView.separated(
-                        itemCount: stores.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1),
-                        itemBuilder: (_, index) {
-                          final item = stores[index];
-                          return StoreItemTile(
-                            item: item,
-                            onTap: () => controller.navigateToStoreDetail(item),
-                          );
+                      return NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification scrollInfo) {
+                          if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 100 && !controller.isLoading.value) {
+                            controller.loadMoreStores();
+                          }
+                          return false;
                         },
+                        child: ListView.separated(
+                          itemCount: stores.length,
+                          separatorBuilder: (_, __) => const Divider(height: 1),
+                          itemBuilder: (_, index) {
+                            final item = stores[index];
+                            return StoreItemTile(
+                              item: item,
+                              onTap: () => controller.navigateToStoreDetail(item),
+                            );
+                          },
+                        ),
                       );
                     }),
                   ),
