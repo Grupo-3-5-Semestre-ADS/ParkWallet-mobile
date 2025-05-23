@@ -11,15 +11,16 @@ class HistoryRepository {
   final AuthService authService = Get.find<AuthService>();
 
   Future<List<Transaction>> fetchHistory({int page = 1, int size = 10}) async {
+    log("fetchHistory called");
     final userId = authService.userId;
     if (userId == null) throw CustomException('Usuário não autenticado.');
 
-    final uri = Uri.parse(
-      Endpoints.historyEndpoint.replaceFirst('{id}', userId),
-    ).replace(queryParameters: {
+    final uri = Uri.parse(Endpoints.historyEndpoint).replace(queryParameters: {
       '_page': page.toString(),
       '_size': size.toString(),
+      'userId': userId,
     });
+
 
     final response = await http.get(
       uri,

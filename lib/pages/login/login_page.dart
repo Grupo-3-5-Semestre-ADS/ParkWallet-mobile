@@ -80,13 +80,14 @@ class LoginPage extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    AppButton(
+                    Obx(() => AppButton(
                       label: "login_in".tr,
-                      onPressed: _loginCtrl.login,
+                      onPressed: _loginCtrl.isLoading.value ? null : _loginCtrl.login,
                       backgroundColor: AppColors.sapphire,
                       textColor: Colors.white,
                       width: 300,
-                    ),
+                      isLoading: _loginCtrl.isLoading.value, // NOVO
+                    )),
 
                     const SizedBox(height: 12),
 

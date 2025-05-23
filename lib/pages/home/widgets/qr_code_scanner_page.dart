@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -6,13 +7,15 @@ import 'package:park_wallet/data/dto/product_payment_request.dart';
 import 'package:park_wallet/pages/home/controllers/home_credit_controller.dart';
 import 'package:park_wallet/repositories/payment_repository.dart';
 import 'package:park_wallet/repositories/product_repository.dart';
+// Import your AppButton
+import 'package:park_wallet/pages/widgets/app_button.dart'; // Ensure this path is correct
 
 class QRCodeScannerPage extends StatelessWidget {
   QRCodeScannerPage({super.key});
 
   final PaymentRepository paymentRepository = PaymentRepository();
   final RxBool isProcessing = false.obs;
-  final MobileScannerController scannerController = MobileScannerController(); // Novo!
+  final MobileScannerController scannerController = MobileScannerController();
 
   void _handleScan(BarcodeCapture capture) async {
     if (isProcessing.value) return;
@@ -26,38 +29,29 @@ class QRCodeScannerPage extends StatelessWidget {
     try {
       final code = capture.barcodes.first.rawValue;
       if (code == null) throw 'QR code inválido.';
-      print('QR Code bruto: $code');
 
       final dynamic json = jsonDecode(code);
-      print('JSON decodificado: $json');
 
       if (json is! Map || json['products'] is! List) {
         throw 'QR Code inválido: campo "products" ausente ou malformado.';
       }
-      print('Chegou aqui');
-
 
       final List productsJson = json['products'];
       final List<ProductPaymentRequest> products = [];
       final List<Map<String, dynamic>> detailedProducts = [];
 
       final productRepo = ProductRepository();
-      print('Chegou aqui');
 
       for (var item in productsJson) {
-        print('Chegou aqui no list');
         if (item['productId'] == null || item['quantity'] == null) {
           throw 'Produto inválido no QR Code.';
         }
 
-        print('Chegou aqui no list2');
-
         final productId = int.parse(item['productId'].toString());
         final quantity = int.parse(item['quantity'].toString());
-        print('Chegou aqui2');
         try {
           final product = await productRepo.fetchProductById(productId);
-          print('Produto carregado: ${product.name}');
+          log('Produto carregado: ${product.name}');
 
           products.add(ProductPaymentRequest(productId: productId, quantity: quantity));
           detailedProducts.add({
@@ -68,11 +62,10 @@ class QRCodeScannerPage extends StatelessWidget {
             'facility': product.facility?.name ?? 'Loja desconhecida',
           });
         } catch (e) {
-          print('Erro ao buscar produto ID $productId: $e');
+          log('Erro ao buscar produto ID $productId: $e');
           throw 'Erro ao buscar produto ID $productId';
         }
       }
-      print('Chegou aqui3');
 
       Get.back(); // Fecha o scanner
       await Future.delayed(const Duration(milliseconds: 300));
@@ -80,7 +73,7 @@ class QRCodeScannerPage extends StatelessWidget {
     } catch (e) {
       hasError = true;
       errorMessage = "Erro ao ler dados: $e";
-      Get.back(); // Fecha o scanner mesmo assim
+      Get.back();
     } finally {
       isProcessing.value = false;
 
@@ -91,12 +84,12 @@ class QRCodeScannerPage extends StatelessWidget {
     }
   }
 
-
   Future<void> _showConfirmationDialog(
       List<ProductPaymentRequest> products,
       List<Map<String, dynamic>> detailedProducts,
       ) async {
     final totalCompra = detailedProducts.fold<double>(0, (sum, item) => sum + item['total']);
+    final RxBool isConfirmingPayment = false.obs;
 
     await Get.dialog(
       AlertDialog(
@@ -104,9 +97,8 @@ class QRCodeScannerPage extends StatelessWidget {
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-
               ...detailedProducts.map((item) {
                 return ListTile(
                   contentPadding: EdgeInsets.zero,
@@ -119,7 +111,7 @@ class QRCodeScannerPage extends StatelessWidget {
                     children: [
                       Text(
                         item['facility'],
-                        style: const TextStyle(color: Colors.grey),
+                        style: const TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                       Text(
                         'R\$ ${item['price'].toStringAsFixed(2)} x ${item['quantity']}',
@@ -133,8 +125,7 @@ class QRCodeScannerPage extends StatelessWidget {
                   ),
                 );
               }),
-
-              const Divider(),
+              const Divider(height: 20, thickness: 1),
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
@@ -145,47 +136,79 @@ class QRCodeScannerPage extends StatelessWidget {
             ],
           ),
         ),
+        // MODIFICATIONS FOR BUTTON LAYOUT:
+        actionsAlignment: MainAxisAlignment.center, // Center the actions
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0), // Adjust padding if needed
         actions: [
-          TextButton(
+          AppButton(
+            width: 120, // Define a width, adjust as needed
+            label: 'Cancelar',
+            backgroundColor: Colors.red,
             onPressed: () {
-              Get.back();
-              isProcessing.value = false;
+              Get.back(); // Closes this confirmation dialog
             },
-            child: const Text('Cancelar'),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              Get.back();
-              Get.dialog(const Center(child: CircularProgressIndicator()), barrierDismissible: false);
+          const SizedBox(width: 10), // Spacing between buttons
+          Obx(() => AppButton(
+            width: 120, // Same width as the cancel button
+            label: 'Confirmar',
+            backgroundColor: Colors.green,
+            isLoading: isConfirmingPayment.value,
+            onPressed: isConfirmingPayment.value
+                ? null
+                : () async {
+              isConfirmingPayment.value = true;
+              String? successMessage;
+              String? failureMessage;
 
               try {
                 final message = await paymentRepository.fetchPayment(products);
-
-                Get.back();
-                Get.snackbar("Sucesso", message, snackPosition: SnackPosition.BOTTOM);
-
+                successMessage = message;
                 final creditCtrl = Get.find<HomeCreditController>();
                 await creditCtrl.loadBalance();
               } catch (e) {
-                Get.back();
-                Get.snackbar("Erro", e.toString(), snackPosition: SnackPosition.BOTTOM);
+                failureMessage = e.toString();
+                log("Erro no pagamento: $e");
               } finally {
-                isProcessing.value = false;
+                isConfirmingPayment.value = false;
+                Get.back(); // Close the confirmation dialog
+
+                await Future.delayed(const Duration(milliseconds: 100));
+
+                if (successMessage != null) {
+                  Get.snackbar("Sucesso", successMessage,
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.green,
+                      colorText: Colors.white);
+                }
+                if (failureMessage != null) {
+                  Get.snackbar("Erro no Pagamento", failureMessage,
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white);
+                }
               }
             },
-            child: const Text('Confirmar'),
-          ),
+          )),
         ],
       ),
       barrierDismissible: false,
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Escanear QR Code')),
+      appBar: AppBar(
+        title: const Text('Escanear QR Code'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            scannerController.stop();
+            Get.back();
+          },
+        ),
+      ),
       body: MobileScanner(
         controller: scannerController,
         onDetect: _handleScan,

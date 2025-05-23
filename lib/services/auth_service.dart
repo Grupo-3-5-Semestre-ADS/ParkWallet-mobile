@@ -22,8 +22,6 @@ class AuthService extends GetxService {
       if (parts.length != 3) return null;
 
       final payload = json.decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
-      print(payload.toString());
-
 
       return payload['id']?.toString();
     } catch (e) {

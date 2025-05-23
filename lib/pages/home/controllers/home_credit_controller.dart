@@ -6,7 +6,6 @@ import 'package:park_wallet/repositories/credit_repository.dart';
 class HomeCreditController extends GetxController {
   CreditRepository creditRepository = CreditRepository();
 
-  // Saldo inicial fictício
   final TextEditingController valueController = TextEditingController();
 
   var balance = 0.0.obs;
@@ -21,7 +20,6 @@ class HomeCreditController extends GetxController {
   Future<void> loadBalance() async {
     try {
       final newBalance = await creditRepository.fetchBalance();
-      print("NewBalance: $newBalance");
       balance.value = newBalance;
     } catch (e) {
       Get.snackbar("Erro", "Não foi possível carregar o saldo");

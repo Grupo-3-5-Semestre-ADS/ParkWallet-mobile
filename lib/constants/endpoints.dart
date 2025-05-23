@@ -9,6 +9,6 @@ class Endpoints {
   static const balanceEndpoint = "$uriServidor/api/wallets/{id}";
   static const paymentEndpoint = "$uriServidor/api/payment/{id}";
 
-  static const historyEndpoint = "$uriServidor/api/transactions/users/{id}/transactions-with-items";
+  static const historyEndpoint = "$uriServidor/api/transactions/by-user";
   static const productsEndpoint = "$uriServidor/api/products/{id}";
 }
