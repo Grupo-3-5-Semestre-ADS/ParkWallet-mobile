@@ -16,6 +16,20 @@ class StoreDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<StoreDetailController>();
 
+    if (controller.store.value == null) {
+      return Scaffold(
+        appBar: CommonAppBar(),
+        drawer: CommonDrawer(),
+        body: const Center(
+          child: Text(
+            'Erro ao carregar detalhes da loja.',
+            style: TextStyle(color: Colors.red, fontSize: 18),
+          ),
+        ),
+        bottomNavigationBar: CommonBottomNavigationBar(currentRoute: "/stores"),
+      );
+    }
+
     return Scaffold(
       appBar: CommonAppBar(),
       drawer: CommonDrawer(),
@@ -24,12 +38,7 @@ class StoreDetailPage extends StatelessWidget {
           WaveBackground(opaque: true),
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 16, 12, 8),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-              ),
+            child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

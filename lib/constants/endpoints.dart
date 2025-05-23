@@ -1,5 +1,5 @@
 class Endpoints {
-  static const uriServidor = "http://192.168.0.104:8080";
+  static const uriServidor = "http://192.168.0.103:8080";
   //static const uriServidor = "http://192.168.0.62:8080";
 
 

@@ -17,6 +17,16 @@ class StoreDetailController extends GetxController {
     _loadStoreDetailAndProducts();
   }
 
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
+  void updateStore(Store newStore) async {
+    store.value = newStore;
+    await _loadStoreDetailAndProducts();
+  }
+
   Future<void> _loadStoreDetailAndProducts() async {
     isLoading.value = true;
     try {

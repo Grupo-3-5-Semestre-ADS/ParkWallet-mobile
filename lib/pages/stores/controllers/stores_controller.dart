@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:park_wallet/data/models/store.dart';
 import 'package:park_wallet/routes/app_pages.dart';
 import 'package:park_wallet/repositories/store_repository.dart';
-
+import 'package:park_wallet/pages/stores/controllers/store_detail_controller.dart';
 class StoresController extends GetxController {
   final RxList<Store> _allStores = <Store>[].obs;
   final RxList<Store> filteredStores = <Store>[].obs;
@@ -25,9 +25,9 @@ class StoresController extends GetxController {
     if (_isFetchingMore) return;
     _isFetchingMore = true;
     if (reset) {
+      _allStores.clear();
       _currentPage = 1;
       _hasMore = true;
-      _allStores.clear();
     }
     isLoading.value = true;
     try {
@@ -70,6 +70,7 @@ class StoresController extends GetxController {
     _fetchStores(reset: true);
   }
   void navigateToStoreDetail(Store store) {
-    Get.toNamed(Routes.STORE_DETAIL, arguments: store);
+    Get.delete<StoreDetailController>();
+    Get.toNamed(Routes.STORE_DETAIL, arguments: store, preventDuplicates: false);
   }
 }
