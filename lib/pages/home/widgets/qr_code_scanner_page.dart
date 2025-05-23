@@ -9,54 +9,88 @@ import 'package:park_wallet/repositories/product_repository.dart';
 
 class QRCodeScannerPage extends StatelessWidget {
   QRCodeScannerPage({super.key});
-  final PaymentRepository paymentRepository = PaymentRepository();
 
+  final PaymentRepository paymentRepository = PaymentRepository();
   final RxBool isProcessing = false.obs;
+  final MobileScannerController scannerController = MobileScannerController(); // Novo!
 
   void _handleScan(BarcodeCapture capture) async {
     if (isProcessing.value) return;
     isProcessing.value = true;
 
-    final code = capture.barcodes.first.rawValue;
-    if (code == null) return;
+    scannerController.stop();
+
+    bool hasError = false;
+    String? errorMessage;
 
     try {
-      final json = jsonDecode(code);
-      final List productsJson = json['products'];
+      final code = capture.barcodes.first.rawValue;
+      if (code == null) throw 'QR code inválido.';
+      print('QR Code bruto: $code');
 
+      final dynamic json = jsonDecode(code);
+      print('JSON decodificado: $json');
+
+      if (json is! Map || json['products'] is! List) {
+        throw 'QR Code inválido: campo "products" ausente ou malformado.';
+      }
+      print('Chegou aqui');
+
+
+      final List productsJson = json['products'];
       final List<ProductPaymentRequest> products = [];
       final List<Map<String, dynamic>> detailedProducts = [];
 
       final productRepo = ProductRepository();
+      print('Chegou aqui');
 
       for (var item in productsJson) {
+        print('Chegou aqui no list');
+        if (item['productId'] == null || item['quantity'] == null) {
+          throw 'Produto inválido no QR Code.';
+        }
+
+        print('Chegou aqui no list2');
+
         final productId = int.parse(item['productId'].toString());
         final quantity = int.parse(item['quantity'].toString());
+        print('Chegou aqui2');
+        try {
+          final product = await productRepo.fetchProductById(productId);
+          print('Produto carregado: ${product.name}');
 
-        final product = await productRepo.fetchProductById(productId);
-
-        products.add(ProductPaymentRequest(
-          productId: productId,
-          quantity: quantity,
-        ));
-
-        detailedProducts.add({
-          'name': product.name,
-          'price': product.price,
-          'quantity': quantity,
-          'total': product.price * quantity,
-          'facility': product.facility?.name ?? 'Loja desconhecida',
-        });
+          products.add(ProductPaymentRequest(productId: productId, quantity: quantity));
+          detailedProducts.add({
+            'name': product.name,
+            'price': product.price,
+            'quantity': quantity,
+            'total': product.price * quantity,
+            'facility': product.facility?.name ?? 'Loja desconhecida',
+          });
+        } catch (e) {
+          print('Erro ao buscar produto ID $productId: $e');
+          throw 'Erro ao buscar produto ID $productId';
+        }
       }
+      print('Chegou aqui3');
 
-      Get.back();
+      Get.back(); // Fecha o scanner
       await Future.delayed(const Duration(milliseconds: 300));
       await _showConfirmationDialog(products, detailedProducts);
     } catch (e) {
+      hasError = true;
+      errorMessage = "Erro ao ler dados: $e";
+      Get.back(); // Fecha o scanner mesmo assim
+    } finally {
       isProcessing.value = false;
-      Get.snackbar("Erro", "Erro ao ler dados: $e", snackPosition: SnackPosition.BOTTOM);
+
+      if (hasError && errorMessage != null) {
+        await Future.delayed(const Duration(milliseconds: 300));
+        Get.snackbar("Erro", errorMessage, snackPosition: SnackPosition.BOTTOM);
+      }
     }
   }
+
 
   Future<void> _showConfirmationDialog(
       List<ProductPaymentRequest> products,
@@ -153,7 +187,8 @@ class QRCodeScannerPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Escanear QR Code')),
       body: MobileScanner(
-        onDetect: (capture) => _handleScan(capture),
+        controller: scannerController,
+        onDetect: _handleScan,
       ),
     );
   }

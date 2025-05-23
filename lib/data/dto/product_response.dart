@@ -4,7 +4,7 @@ class ProductResponse {
   final String name;
   final String description;
   final double price;
-  final bool inactive;
+  final bool active;
   final String createdAt;
   final String updatedAt;
   final int facilityId;
@@ -15,7 +15,7 @@ class ProductResponse {
     required this.name,
     required this.description,
     required this.price,
-    required this.inactive,
+    required this.active,
     required this.createdAt,
     required this.updatedAt,
     required this.facilityId,
@@ -28,7 +28,7 @@ class ProductResponse {
       name: json['name'],
       description: json['description'],
       price: double.tryParse(json['price'].toString()) ?? 0,
-      inactive: json['inactive'],
+      active: json['active'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
       facilityId: json['facilityId'],
@@ -46,7 +46,7 @@ class Facility {
   final String type;
   final String latitude;
   final String longitude;
-  final bool inactive;
+  final bool active;
   final String createdAt;
   final String updatedAt;
 
@@ -57,7 +57,7 @@ class Facility {
     required this.type,
     required this.latitude,
     required this.longitude,
-    required this.inactive,
+    required this.active,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -70,7 +70,7 @@ class Facility {
       type: json['type'],
       latitude: json['latitude'],
       longitude: json['longitude'],
-      inactive: json['inactive'],
+      active: json['active'],
       createdAt: json['createdAt'],
       updatedAt: json['updatedAt'],
     );

@@ -18,11 +18,14 @@ class ProductRepository {
       },
     );
 
+    log('Status code: ${response.statusCode}');
+    log('Response body: ${response.body}');
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return ProductResponse.fromJson(data);
     } else {
-      log(response.body.toString());
+      log('Erro ao buscar produto $id: ${response.body}');
       throw Exception('Erro ao buscar produto $id');
     }
   }
