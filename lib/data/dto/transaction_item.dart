@@ -16,4 +16,9 @@ class TransactionItem {
       totalValue: double.tryParse(json['totalValue']?.toString() ?? '0') ?? 0,
     );
   }
+
+  @override
+  String toString() {
+    return 'TransactionItem{productId: $productId, quantity: $quantity, totalValue: $totalValue}';
+  }
 }

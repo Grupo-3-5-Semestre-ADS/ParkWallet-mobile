@@ -23,4 +23,9 @@ class Transaction {
           .toList(),
     );
   }
+
+  @override
+  String toString() {
+    return 'Transaction{totalValue: $totalValue, operation: $operation, items: $items, createdAt: $createdAt} \n';
+  }
 }

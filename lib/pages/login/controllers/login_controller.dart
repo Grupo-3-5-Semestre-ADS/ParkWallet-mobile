@@ -5,45 +5,46 @@ import "package:get/get.dart";
 import "package:park_wallet/data/dto/login_request.dart";
 import "package:park_wallet/repositories/auth_repository.dart";
 import "package:park_wallet/services/auth_service.dart";
-
 class LoginController extends GetxController {
-
   final AuthRepository authRepo = AuthRepository();
-
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController passwordCtrl = TextEditingController();
 
-  Future<void> login() async {
-    String token;
-    String email = emailCtrl.text;
-    String password = passwordCtrl.text;
-    LoginRequest loginRequest = LoginRequest(email: email, password: password);
+  final RxBool isLoading = false.obs;
 
+  Future<void> login() async {
+    if (isLoading.value) return;
+    isLoading.value = true;
+
+    final email = emailCtrl.text;
+    final password = passwordCtrl.text;
+    final loginRequest = LoginRequest(email: email, password: password);
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
     if (email.isEmpty || password.isEmpty) {
       Get.snackbar("Erro", "Todos os campos devem ser preenchidos.");
+      isLoading.value = false;
       return;
     }
 
     if (!emailRegex.hasMatch(email)) {
       Get.snackbar("Erro", "Formato de e-mail inválido.");
+      isLoading.value = false;
       return;
     }
 
     try {
-      print("Chegou aqui!");
-
-      token = await authRepo.fetchLogin(loginRequest);
+      final token = await authRepo.fetchLogin(loginRequest);
+      emailCtrl.clear();
+      passwordCtrl.clear();
+      Get.find<AuthService>().saveToken(token);
+      Get.offAllNamed('/home');
     } catch (e) {
-      Get.snackbar("Error", e.toString());
+      Get.snackbar("Erro", e.toString());
       log(e.toString());
-      return;
+    } finally {
+      isLoading.value = false;
     }
-
-    emailCtrl.text = "";
-    passwordCtrl.text = "";
-    Get.find<AuthService>().saveToken(token);
-    Get.offAllNamed('/home');
   }
 
   void register() {
@@ -52,8 +53,8 @@ class LoginController extends GetxController {
   }
 
   void cleanFields() {
-    emailCtrl.text = "";
-    passwordCtrl.text = "";
+    emailCtrl.clear();
+    passwordCtrl.clear();
   }
 
   @override
@@ -62,5 +63,4 @@ class LoginController extends GetxController {
     passwordCtrl.dispose();
     super.dispose();
   }
-
 }

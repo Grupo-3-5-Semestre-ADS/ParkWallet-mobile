@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
-import 'package:park_wallet/pages/widgets/app_button.dart';
 import 'package:park_wallet/pages/widgets/purchase_item_tile.dart';
 import 'package:park_wallet/pages/widgets/added_balance_tile.dart';
 import 'package:park_wallet/pages/widgets/common_app_bar.dart';
@@ -36,23 +35,9 @@ class HistoryPage extends StatelessWidget {
                 children: [
                   Text(
                     "transaction_history".tr,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 12),
-                  // TextField(
-                  //   onChanged: controller.updateSearch,
-                  //   decoration: InputDecoration(
-                  //     hintText: 'search_transactions'.tr,
-                  //     prefixIcon: const Icon(Icons.search),
-                  //     filled: true,
-                  //     fillColor: Colors.grey[100],
-                  //     contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  //     border: OutlineInputBorder(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //       borderSide: BorderSide.none,
-                  //     ),
-                  //   ),
-                  // ),
                   const SizedBox(height: 12),
                   Expanded(
                     child: Obx(() {
@@ -66,25 +51,32 @@ class HistoryPage extends StatelessWidget {
                         onRefresh: () async {
                           await controller.loadData(reset: true);
                         },
-
                         child: ListView.separated(
+                          controller: controller.scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(), // Permite puxar do topo
+                          padding: const EdgeInsets.only(bottom: 24), // Espaço extra no final
                           itemCount: transactions.length + 1,
                           separatorBuilder: (_, __) => const Divider(height: 1),
                           itemBuilder: (_, index) {
                             if (index == transactions.length) {
-                              return Padding(
-                                padding: const EdgeInsets.all(12),
-                                child: Center(
-                                  child: AppButton(
-                                    label: "load_more".tr,
-                                    backgroundColor: AppColors.muted_blue,
-                                    onPressed: controller.loadMore,
-                                    icon: Icons.refresh,
-                                    iconPosition: IconPosition.start,
-                                    width: 180,
-                                  ),
-                                ),
-                              );
+                              return Obx(() {
+                                if (controller.isLoadingMore.value) {
+                                  return const Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Center(child: CircularProgressIndicator()),
+                                  );
+                                } else {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Center(
+                                      child: Text(
+                                        "Você chegou ao fim da lista.",
+                                        style: TextStyle(color: Colors.grey[600]),
+                                      ),
+                                    ),
+                                  );
+                                }
+                              });
                             }
 
                             final item = transactions[index];
@@ -93,6 +85,7 @@ class HistoryPage extends StatelessWidget {
                                 : AddedBalanceTile(transaction: item);
                           },
                         ),
+
                       );
                     }),
                   ),
@@ -102,7 +95,8 @@ class HistoryPage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: CommonBottomNavigationBar(currentRoute: "/history"),
+      bottomNavigationBar:
+      CommonBottomNavigationBar(currentRoute: "/history"),
     );
   }
 }
