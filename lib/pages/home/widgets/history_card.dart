@@ -27,16 +27,24 @@ class HistoryCard extends StatelessWidget {
           builder: (context, constraints) {
             const itemHeight = 70.0;
             const headerHeight = 50.0;
-
             final availableHeight = constraints.maxHeight - headerHeight;
             final maxItems = availableHeight ~/ itemHeight;
+
+            // Chama o carregamento somente após o layout ser calculado
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (historyController.maxVisibleItems.value != maxItems) {
+                historyController.maxVisibleItems.value = maxItems;
+                historyController.loadHistory(size: maxItems);
+              }
+            });
+
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "transaction_history".tr,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
                 Obx(() {
@@ -52,14 +60,14 @@ class HistoryCard extends StatelessWidget {
                       final item = visibleItems[index];
                       if (item.operation == "purchase") {
                         return PurchaseItemTile(transaction: item);
-                      } else if (item.operation == "recharge") {
+                      } else if (item.operation == "credit") {
                         return AddedBalanceTile(transaction: item);
                       }
                       return const SizedBox.shrink();
                     },
                   );
                 }),
-                const Spacer(), // <- Isso empurra o botão para o fim
+                const Spacer(),
                 Align(
                   alignment: Alignment.center,
                   child: AppButton(
@@ -80,4 +88,5 @@ class HistoryCard extends StatelessWidget {
       ),
     );
   }
+
 }

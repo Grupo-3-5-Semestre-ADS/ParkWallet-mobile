@@ -1,3 +1,4 @@
+// lib/pages/home/widgets/qr_code_scanner_page.dart
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
@@ -5,10 +6,12 @@ import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:park_wallet/data/dto/product_payment_request.dart';
 import 'package:park_wallet/pages/home/controllers/home_credit_controller.dart';
+import 'package:park_wallet/pages/home/controllers/home_history_controller.dart';
 import 'package:park_wallet/repositories/payment_repository.dart';
 import 'package:park_wallet/repositories/product_repository.dart';
-// Import your AppButton
-import 'package:park_wallet/pages/widgets/app_button.dart'; // Ensure this path is correct
+import 'package:park_wallet/pages/widgets/app_button.dart';
+// IMPORTANT: Import your app_routes.dart to use the Routes class
+import 'package:park_wallet/routes/app_pages.dart'; // Adjust path if needed
 
 class QRCodeScannerPage extends StatelessWidget {
   QRCodeScannerPage({super.key});
@@ -67,17 +70,20 @@ class QRCodeScannerPage extends StatelessWidget {
         }
       }
 
-      Get.back(); // Fecha o scanner
-      await Future.delayed(const Duration(milliseconds: 300));
+      // Get.back(); // <-- REMOVE THIS
+      Get.offAllNamed(Routes.HOME); // <-- Navigate to Home and clear stack
+      await Future.delayed(const Duration(milliseconds: 300)); // Ensure page transition animation completes
       await _showConfirmationDialog(products, detailedProducts);
     } catch (e) {
       hasError = true;
       errorMessage = "Erro ao ler dados: $e";
-      Get.back();
+      // Get.back(); // <-- REMOVE THIS
+      Get.offAllNamed(Routes.HOME); // <-- Navigate to Home and clear stack
     } finally {
-      isProcessing.value = false;
+      isProcessing.value = false; // Reset processing state
 
       if (hasError && errorMessage != null) {
+        // This snackbar will now appear on the HomePage
         await Future.delayed(const Duration(milliseconds: 300));
         Get.snackbar("Erro", errorMessage, snackPosition: SnackPosition.BOTTOM);
       }
@@ -91,6 +97,7 @@ class QRCodeScannerPage extends StatelessWidget {
     final totalCompra = detailedProducts.fold<double>(0, (sum, item) => sum + item['total']);
     final RxBool isConfirmingPayment = false.obs;
 
+    // This dialog will now appear on top of HomePage
     await Get.dialog(
       AlertDialog(
         title: const Text('Confirmar Pagamento'),
@@ -136,21 +143,21 @@ class QRCodeScannerPage extends StatelessWidget {
             ],
           ),
         ),
-        // MODIFICATIONS FOR BUTTON LAYOUT:
-        actionsAlignment: MainAxisAlignment.center, // Center the actions
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0), // Adjust padding if needed
+        actionsAlignment: MainAxisAlignment.center,
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         actions: [
           AppButton(
-            width: 120, // Define a width, adjust as needed
+            width: 120,
             label: 'Cancelar',
             backgroundColor: Colors.red,
             onPressed: () {
-              Get.back(); // Closes this confirmation dialog
+              Get.until((route) => route.settings.name == Routes.HOME);
+
             },
           ),
-          const SizedBox(width: 10), // Spacing between buttons
+          const SizedBox(width: 10),
           Obx(() => AppButton(
-            width: 120, // Same width as the cancel button
+            width: 120,
             label: 'Confirmar',
             backgroundColor: Colors.green,
             isLoading: isConfirmingPayment.value,
@@ -165,14 +172,15 @@ class QRCodeScannerPage extends StatelessWidget {
                 final message = await paymentRepository.fetchPayment(products);
                 successMessage = message;
                 final creditCtrl = Get.find<HomeCreditController>();
-                await creditCtrl.loadBalance();
+                await creditCtrl.loadBalance(); // This will update on HomePage
+                final historyCtrl = Get.find<HomeHistoryController>();
+                await historyCtrl.loadHistory(); // This will update on HomePage
               } catch (e) {
                 failureMessage = e.toString();
                 log("Erro no pagamento: $e");
               } finally {
                 isConfirmingPayment.value = false;
-                Get.back(); // Close the confirmation dialog
-
+                Get.until((route) => route.settings.name == Routes.HOME);
                 await Future.delayed(const Duration(milliseconds: 100));
 
                 if (successMessage != null) {
@@ -205,7 +213,7 @@ class QRCodeScannerPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             scannerController.stop();
-            Get.back();
+            Get.offAllNamed(Routes.HOME); // <-- Navigate to Home and clear stack
           },
         ),
       ),

@@ -43,15 +43,13 @@ class AppButton extends StatelessWidget {
       final content = <Widget>[
         if (icon != null && iconPosition == IconPosition.start)
           Icon(icon, color: textColor, size: 18),
-        Flexible(
-          child: Text(
-            label,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 16,
-              color: textColor,
-              fontWeight: FontWeight.w600,
-            ),
+        Text(
+          label,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 16,
+            color: textColor,
+            fontWeight: FontWeight.w600,
           ),
         ),
         if (icon != null && iconPosition == IconPosition.end)
