@@ -1,105 +1,76 @@
 import 'package:get/get.dart';
 import 'package:park_wallet/data/models/store.dart';
 import 'package:park_wallet/routes/app_pages.dart';
-
+import 'package:park_wallet/repositories/store_repository.dart';
+import 'package:park_wallet/pages/stores/controllers/store_detail_controller.dart';
 class StoresController extends GetxController {
   final RxList<Store> _allStores = <Store>[].obs;
   final RxList<Store> filteredStores = <Store>[].obs;
   final RxString searchQuery = ''.obs;
+  final StoreRepository storeRepository = StoreRepository();
+  final RxBool isLoading = true.obs;
+  int _currentPage = 1;
+  final int _limit = 20;
+  bool _hasMore = true;
+  bool _isFetchingMore = false;
 
   @override
   void onInit() {
     super.onInit();
-    _generateMockData();
-    _applyFilter();
+    _fetchStores(reset: true);
     debounce(searchQuery, (_) => _applyFilter(), time: const Duration(milliseconds: 300));
   }
 
-  void _generateMockData() {
-    final stores = [
-      Store(
-        id: '1',
-        name: 'Barraca da Pamonha',
-        type: 'Alimentação',
-        image: 'assets/images/pamonha.png',
-        description: 'Deliciosas pamonhas e outros produtos de milho.',
-      ),
-      Store(
-        id: '2',
-        name: 'Barraca das Porções',
-        type: 'Alimentação',
-        image: 'assets/images/porcoes.png',
-        description: 'Porções variadas para toda a família.',
-      ),
-      Store(
-        id: '3',
-        name: 'Loja de Souvenirs',
-        type: 'Presentes',
-        image: null,
-        description: 'Lembranças e presentes para todos os gostos.',
-      ),
-      Store(
-        id: '4',
-        name: 'Café do Parque',
-        type: 'Alimentação',
-        image: null,
-        description: 'Cafés especiais e lanches rápidos.',
-      ),
-      Store(
-        id: '5',
-        name: 'Loja de Brinquedos',
-        type: 'Entretenimento',
-        image: null,
-        description: 'Brinquedos e jogos para todas as idades.',
-      ),
-      Store(
-        id: '6',
-        name: 'Sorveteria Gelato',
-        type: 'Alimentação',
-        image: null,
-        description: 'Sorvetes artesanais com sabores variados.',
-      ),
-      Store(
-        id: '7',
-        name: 'Loja de Roupas',
-        type: 'Vestuário',
-        image: null,
-        description: 'Roupas e acessórios para toda a família.',
-      ),
-      Store(
-        id: '8',
-        name: 'Farmácia do Parque',
-        type: 'Saúde',
-        image: null,
-        description: 'Medicamentos e produtos de higiene.',
-      ),
-    ];
+  Future<void> _fetchStores({bool reset = false}) async {
+    if (_isFetchingMore) return;
+    _isFetchingMore = true;
+    if (reset) {
+      _allStores.clear();
+      _currentPage = 1;
+      _hasMore = true;
+    }
+    isLoading.value = true;
+    try {
+      final stores = await storeRepository.fetchStores(page: _currentPage, limit: _limit);
+      if (stores.length < _limit) {
+        _hasMore = false;
+      }
+      _allStores.addAll(stores);
+      _applyFilter();
+      _currentPage++;
+    } catch (e) {
+      Get.snackbar('Erro', e.toString());
+    } finally {
+      isLoading.value = false;
+      _isFetchingMore = false;
+    }
+  }
 
-    _allStores.addAll(stores);
+  void loadMoreStores() {
+    if (_hasMore && !_isFetchingMore) {
+      _fetchStores();
+    }
   }
 
   void _applyFilter() {
     final query = searchQuery.value.toLowerCase();
     if (query.isEmpty) {
       filteredStores.value = _allStores;
-      return;
+    } else {
+      final matches = _allStores
+          .where((store) =>
+              store.name.toLowerCase().contains(query) ||
+              store.type.toLowerCase().contains(query))
+          .toList();
+      filteredStores.value = matches;
     }
-
-    final matches = _allStores
-        .where((store) =>
-            store.name.toLowerCase().contains(query) ||
-            store.type.toLowerCase().contains(query))
-        .toList();
-
-    filteredStores.value = matches;
   }
-
-  void updateSearch(String query) {
-    searchQuery.value = query;
+  void updateSearch(String value) {
+    searchQuery.value = value;
+    _fetchStores(reset: true);
   }
-
   void navigateToStoreDetail(Store store) {
-    // Navegar para a tela de detalhes da loja
-    Get.toNamed(Routes.STORE_DETAIL, arguments: store);
+    Get.delete<StoreDetailController>();
+    Get.toNamed(Routes.STORE_DETAIL, arguments: store, preventDuplicates: false);
   }
 }
