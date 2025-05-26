@@ -12,4 +12,14 @@ class Store {
     this.image,
     this.description,
   });
+
+  factory Store.fromJson(Map<String, dynamic> json) {
+    return Store(
+      id: json['id'].toString(),
+      name: json['name'] ?? '',
+      type: json['type'] ?? '',
+      image: json['image'],
+      description: json['description'],
+    );
+  }
 }

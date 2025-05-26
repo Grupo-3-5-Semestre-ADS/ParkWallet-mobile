@@ -12,4 +12,7 @@ class Endpoints {
 
   static const historyEndpoint = "$uriServidor/api/transactions/by-user";
   static const productsEndpoint = "$uriServidor/api/products/{id}";
+  static const storesEndpoint = "$uriServidor/api/facilities";
+  static const storeDetailEndpoint = "$uriServidor/api/facilities/{id}";
+  static const storeProductsEndpoint = "$uriServidor/api/facilities/{id}/products";
 }
