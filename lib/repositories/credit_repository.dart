@@ -48,6 +48,68 @@ class CreditRepository {
     }
   }
 
+  Future<double> rechargeCredit(double amount) async {
+    final userId = authService.userId;
+    if (userId == null) throw CustomException('Usuário não autenticado.');
 
+    final url = Uri.parse(Endpoints.rechargeEndpoint.replaceFirst('{id}', userId));
+    log('Tentando recarga. URL: $url, Valor: $amount, UserId: $userId');
+    
+    try {
+      log('Token de autenticação: ${authService.token?.substring(0, 20)}...');
+      
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authService.token}',
+        },
+        body: jsonEncode({
+          'amount': amount,
+        }),
+      );
 
+      final status = response.statusCode;
+      log('Resposta recebida. Status: $status');
+      log('Corpo da resposta: ${response.body}');
+      
+      // Verificar se o corpo da resposta está vazio ou inválido
+      if (response.body.isEmpty) {
+        log('Resposta vazia, buscando saldo atualizado');
+        return await fetchBalance();
+      }
+      
+      try {
+        final data = jsonDecode(response.body);
+
+        if (status == 200) {
+          if (data['transaction'] != null && data['transaction']['newBalance'] != null) {
+            final newBalance = double.tryParse(data['transaction']['newBalance'].toString()) ?? 0.0;
+            log('Novo saldo obtido: $newBalance');
+            return newBalance;
+          } else {
+            log('Novo saldo não encontrado na resposta, buscando saldo atual');
+            // Caso o novo saldo não seja retornado, buscar o saldo atualizado
+            return await fetchBalance();
+          }
+        } else {
+          final errorMessage = data['message'] ?? data['error'] ?? 'Erro ao processar recarga.';
+          log('Erro na recarga: $errorMessage');
+          throw CustomException(errorMessage);
+        }
+      } catch (parseError) {
+        log('Erro ao processar JSON da resposta: $parseError');
+        // Se a recarga foi processada mas houve erro no parse, buscar o saldo atualizado
+        if (status == 200) {
+          return await fetchBalance();
+        } else {
+          throw CustomException('Erro ao processar resposta do servidor');
+        }
+      }
+    } catch (e) {
+      if (e is CustomException) rethrow;
+      log('Erro ao processar recarga: $e');
+      throw CustomException('Falha na comunicação com o servidor.');
+    }
+  }
 }
