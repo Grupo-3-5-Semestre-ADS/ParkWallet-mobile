@@ -1,5 +1,5 @@
 class Endpoints {
-  static const uriServidor = "http://10.0.2.2:8080";
+  static const uriServidor = "http://localhost:8080";
   //static const uriServidor = "http://192.168.0.62:8080";
 
   static const loginEndpoint = "$uriServidor/login";
@@ -11,4 +11,5 @@ class Endpoints {
 
   static const historyEndpoint = "$uriServidor/api/transactions/by-user";
   static const productsEndpoint = "$uriServidor/api/products/{id}";
+  static const getFacilities = "$uriServidor/api/facilities/";
 }

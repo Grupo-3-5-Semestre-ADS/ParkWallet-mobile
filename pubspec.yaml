@@ -46,6 +46,8 @@ dependencies:
   cached_network_image: ^3.3.1
   http: ^1.3.0
   mobile_scanner: ^7.0.0
+  google_maps_flutter: ^2.6.0
+  permission_handler: ^11.3.0
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +79,12 @@ flutter:
     - assets/images/spain-circle-flag.png
     - assets/images/uk-circle-flag.png
     - assets/images/pamonha.png
+    - assets/map_style.json
+    - assets/images/pins/
+    - assets/images/pins/pin_attraction.png
+    - assets/images/pins/pin_other.png
+    - assets/images/pins/pin_store.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

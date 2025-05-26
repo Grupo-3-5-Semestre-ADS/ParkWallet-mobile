@@ -6,6 +6,8 @@ import 'package:park_wallet/pages/history/history_page.dart';
 import 'package:park_wallet/pages/home/home_binding.dart';
 import 'package:park_wallet/pages/home/home_page.dart';
 import 'package:park_wallet/pages/login/login_page.dart';
+import 'package:park_wallet/pages/map/map_binding.dart';
+import 'package:park_wallet/pages/map/map_page.dart';
 import 'package:park_wallet/pages/register/register_page.dart';
 import 'package:park_wallet/pages/register/regsiter_binding.dart';
 import 'package:park_wallet/pages/stores/store_detail_binding.dart';
@@ -57,5 +59,11 @@ class AppPages {
       binding: ChatBinding(),
       middlewares: [AuthMiddleware()],
     ),
+    GetPage(
+      name: Routes.MAP,
+      page: () => const MapPage(),
+      binding: MapBinding(),
+      middlewares: [AuthMiddleware()], // Adicione o middleware aqui
+    )
   ];
 }

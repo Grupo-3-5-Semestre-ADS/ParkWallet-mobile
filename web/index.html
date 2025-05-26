@@ -21,18 +21,41 @@
   <meta name="description" content="A new Flutter project.">
 
   <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="park_wallet">
+  <meta name="apple-mobile-web-app-title" content="park_wallet"> <!-- Seu título -->
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>park_wallet</title>
+  <title>park_wallet</title> <!-- Seu título -->
   <link rel="manifest" href="manifest.json">
+
+  <!-- ===================================================================== -->
+  <!-- LINHA MAIS IMPORTANTE: Carregar a API JavaScript do Google Maps     -->
+  <!-- SUBSTITUA 'SUA_API_KEY_AQUI' PELA SUA CHAVE DE API REAL E RESTRITA -->
+  <!-- ===================================================================== -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4CBphR3kp33QG9-f8lD0yPhiXo7VPcCc&libraries=maps,marker&v=beta"></script>
+  <!-- 
+    Notas sobre a URL do script:
+    - &libraries=maps,marker: Carrega a biblioteca principal e a de marcadores.
+      O `google_maps_flutter_web` pode precisar de 'marker' para Advanced Markers no futuro,
+      ou pode adicionar as bibliotecas que precisa dinamicamente. Incluir 'maps' é o mínimo.
+    - &v=beta ou &v=weekly: Especifica a versão da API. 'weekly' é comum. 'beta' pode dar acesso
+      a recursos mais novos como Advanced Markers, mas pode ser menos estável.
+      Você pode começar sem o parâmetro &v= ou usar &v=weekly.
+    - Removi o &callback=initMap porque o plugin google_maps_flutter_web
+      geralmente lida com a inicialização da API JS de sua própria maneira, esperando
+      que window.google.maps esteja disponível. Se você AINDA tiver problemas, pode
+      tentar reintroduzir um callback e garantir que o Flutter só inicialize o mapa
+      depois que o callback for chamado, mas isso adiciona complexidade.
+  -->
+  <!-- ===================================================================== -->
+
 </head>
 <body>
+  <!-- Este script carrega a aplicação Flutter. Deixe como está. -->
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
