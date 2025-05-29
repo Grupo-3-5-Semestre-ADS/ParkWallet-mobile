@@ -11,6 +11,9 @@ class Endpoints {
   static const rechargeEndpoint = "$uriServidor/api/recharges/{id}";
 
   static const historyEndpoint = "$uriServidor/api/transactions/by-user";
+  static const chatEndpoint = uriServidor; // Socket.IO endpoint para chat
+  static const socketEndpoint = uriServidor; // Socket.IO endpoint
+  static const chatApiEndpoint = "$uriServidor/api/chats";
   static const productsEndpoint = "$uriServidor/api/products/{id}";
   static const storesEndpoint = "$uriServidor/api/facilities";
   static const storeDetailEndpoint = "$uriServidor/api/facilities/{id}";
