@@ -6,7 +6,8 @@ class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     final authService = Get.find<AuthService>();
-    if (!authService.hasValidToken!) {
+    final hasValidToken = authService.hasValidToken ?? false;
+    if (!hasValidToken) {
       return const RouteSettings(name: '/login');
     }
     return null; // segue para rota original
