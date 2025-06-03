@@ -10,7 +10,7 @@ class StoresController extends GetxController {
   final StoreRepository storeRepository = StoreRepository();
   final RxBool isLoading = true.obs;
   int _currentPage = 1;
-  final int _limit = 20;
+  final int _limit = 100;
   bool _hasMore = true;
   bool _isFetchingMore = false;
 

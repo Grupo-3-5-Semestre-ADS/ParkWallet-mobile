@@ -11,8 +11,8 @@ import 'package:park_wallet/data/models/product.dart';
 class StoreRepository {
   final AuthService authService = Get.find<AuthService>();
 
-  Future<List<Store>> fetchStores({int page = 1, int limit = 20}) async {
-    final url = Uri.parse(Endpoints.storesEndpoint + '?page=$page&limit=$limit');
+  Future<List<Store>> fetchStores({int page = 1, int limit = 100}) async {
+    final url = Uri.parse(Endpoints.storesEndpoint + '?page=$page&_size=$limit');
     final response = await http.get(
       url,
       headers: {
