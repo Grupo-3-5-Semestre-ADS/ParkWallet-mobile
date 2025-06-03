@@ -8,13 +8,37 @@ import 'package:park_wallet/pages/widgets/common_drawer.dart';
 import 'package:park_wallet/pages/widgets/store_item_tile.dart';
 import 'package:park_wallet/pages/widgets/wave_background.dart';
 
-class StoresPage extends StatelessWidget {
+class StoresPage extends StatefulWidget {
   const StoresPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.find<StoresController>();
+  State<StoresPage> createState() => _StoresPageState();
+}
 
+class _StoresPageState extends State<StoresPage> {
+  final ScrollController _scrollController = ScrollController();
+  final controller = Get.find<StoresController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+              _scrollController.position.maxScrollExtent - 100 &&
+          !controller.isLoading.value) {
+        controller.loadMoreStores();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: CommonAppBar(),
       drawer: CommonDrawer(),
@@ -34,7 +58,8 @@ class StoresPage extends StatelessWidget {
                 children: [
                   Text(
                     "stores".tr,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style:
+                        const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
                   TextField(
@@ -60,14 +85,11 @@ class StoresPage extends StatelessWidget {
                         return Center(child: Text("no_stores_found".tr));
                       }
 
-                      return NotificationListener<ScrollNotification>(
-                        onNotification: (ScrollNotification scrollInfo) {
-                          if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 100 && !controller.isLoading.value) {
-                            controller.loadMoreStores();
-                          }
-                          return false;
-                        },
+                      return Scrollbar(
+                        controller: _scrollController,
+                        thumbVisibility: true,
                         child: ListView.separated(
+                          controller: _scrollController,
                           itemCount: stores.length,
                           separatorBuilder: (_, __) => const Divider(height: 1),
                           itemBuilder: (_, index) {
