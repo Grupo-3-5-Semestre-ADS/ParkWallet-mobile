@@ -10,6 +10,6 @@ class AuthMiddleware extends GetMiddleware {
     if (!hasValidToken) {
       return const RouteSettings(name: '/login');
     }
-    return null; // segue para rota original
+    return null;
   }
 }

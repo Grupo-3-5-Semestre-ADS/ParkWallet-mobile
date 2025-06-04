@@ -42,7 +42,6 @@ class StoreDetailController extends GetxController {
   }
 
   void viewOnMap() {
-    // Implementação futura para visualizar a loja no mapa
     Get.snackbar(
       'Funcionalidade em desenvolvimento',
       'Visualização no mapa será implementada em breve.',
@@ -52,7 +51,6 @@ class StoreDetailController extends GetxController {
 }
 
 void addToCart(Product product) {
-  // Implementação futura para adicionar produto ao carrinho
   Get.snackbar(
     'Produto adicionado',
     '${product.name} adicionado ao carrinho.',

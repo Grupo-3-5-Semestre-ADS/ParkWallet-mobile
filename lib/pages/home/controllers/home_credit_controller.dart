@@ -16,16 +16,13 @@ class HomeCreditController extends GetxController {
   var balance = 0.0.obs;
   var isLoading = false.obs;
   
-  // Flag to track recent recharges for history update
   static var hasRecentRecharge = false.obs;
 
-  // override
   @override
   void onInit() {
     super.onInit();
     loadBalance();
   }
-  //
   Future<void> loadBalance() async {
     try {
       isLoading.value = true;
@@ -38,12 +35,10 @@ class HomeCreditController extends GetxController {
     }
   }
 
-  // Simula um pagamento (deduz saldo)
   void pay() {
     Get.to(() => QRCodeScannerPage());
   }
 
-  // Processa uma recarga de crédito
   Future<void> rechargeWithValue(double amount) async {
     try {
       isLoading.value = true;
@@ -57,17 +52,14 @@ class HomeCreditController extends GetxController {
         duration: const Duration(seconds: 3),
       );
       
-      // Mark that a recharge was made and notify the event service
       hasRecentRecharge.value = true;
       print("DEBUG: hasRecentRecharge set to true after recharge");
       
-      // Notify the global transaction event service immediately
       TransactionEventService.instance.notifyRechargeCompleted(
         amount: amount,
         userId: authService.userId ?? 'unknown',
       );
       
-      // Immediately try to refresh history if available
       try {
         final historyController = Get.find<HistoryController>();
         print("DEBUG: Calling immediate refreshData() on HistoryController");
@@ -76,10 +68,8 @@ class HomeCreditController extends GetxController {
         print("DEBUG: HistoryController not found for immediate refresh: $e");
       }
       
-      // Wait for backend to process, then refresh again
       await Future.delayed(const Duration(milliseconds: 2000));
       
-      // Second refresh attempt
       try {
         final historyController = Get.find<HistoryController>();
         print("DEBUG: Calling delayed refreshData() on HistoryController");
@@ -109,7 +99,7 @@ class HomeCreditController extends GetxController {
     valueController.text = "";
 
     if (value != null && value > 0) {
-      Navigator.of(context).pop(); // Fecha o diálogo antes de iniciar a recarga
+      Navigator.of(context).pop();
       rechargeWithValue(value);
     } else {
       Get.snackbar("oops".tr, "valid_amount_warning".tr);

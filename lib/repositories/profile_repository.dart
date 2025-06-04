@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:park_wallet/constants/endpoints.dart';
+import 'package:park_wallet/data/dto/user_profile_update_request.dart';
 import 'package:park_wallet/data/models/user_profile.dart';
 import 'package:park_wallet/global/custom_exception.dart';
 import 'package:park_wallet/services/auth_service.dart';
@@ -37,5 +38,13 @@ class ProfileRepository {
       throw CustomException('Erro ao buscar perfil: $status');
     }
   }
-
+  Future<void> updateUserProfile(UserProfileUpdateRequest request) async {
+    log('[ProfileRepository] Updating user profile with: ${request.toJson()}');
+    // Replace with actual API call
+    // final response = await _apiClient.put('/profile', data: request.toJson());
+    // Handle response, throw error if update failed
+    await Future.delayed(const Duration(seconds: 1));
+    // Example: throw Exception("Simulated API error: Update failed");
+    log('[ProfileRepository] Profile update successful (simulated).');
+  }
 }

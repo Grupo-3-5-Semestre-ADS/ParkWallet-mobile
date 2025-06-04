@@ -24,7 +24,6 @@ class CpfInputFormatter extends TextInputFormatter {
   }
 
   int _getCursorPosition(String formattedText, int digitCount) {
-    // Calcula posição do cursor considerando os caracteres extras
     if (digitCount <= 3) return digitCount;
     if (digitCount <= 6) return digitCount + 1;
     if (digitCount <= 9) return digitCount + 2;

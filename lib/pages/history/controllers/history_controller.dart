@@ -22,9 +22,7 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
   RxBool isRefreshing = false.obs;
   RxBool hasNewTransactions = false.obs;
   
-  // Stream subscription for transaction events
   StreamSubscription<TransactionEvent>? _eventSubscription;
-  // Timer for periodic checks
   Timer? _periodicTimer;
 
   @override
@@ -44,7 +42,6 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
       _applyFilter();
     }, time: const Duration(milliseconds: 300));
     
-    // Subscribe to balance change events
     try {
       final homeCreditController = Get.find<HomeCreditController>();
       ever(homeCreditController.balance, (_) => _reloadOnBalanceChange());
@@ -52,13 +49,11 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
       log("HomeCreditController not found: $e");
     }
     
-    // Subscribe to recent recharge events (legacy)
     ever(HomeCreditController.hasRecentRecharge, (hasRecharge) {
       print("DEBUG: hasRecentRecharge changed to: $hasRecharge");
       if (hasRecharge) {
         log("Recent recharge detected, refreshing history");
         refreshData();
-        // Reset the flag after handling
         Future.delayed(const Duration(seconds: 2), () {
           HomeCreditController.hasRecentRecharge.value = false;
           print("DEBUG: hasRecentRecharge reset to false");
@@ -66,7 +61,6 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
       }
     });
     
-    // Subscribe to the new transaction event service
     _eventSubscription = TransactionEventService.instance.eventStream.listen((event) {
       log("TransactionEvent received: $event");
       switch (event.type) {
@@ -78,11 +72,9 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
       }
     });
     
-    // Start periodic check for recharges
     _startPeriodicCheck();
   }
   
-  /// Start periodic check for recent recharges
   void _startPeriodicCheck() {
     _periodicTimer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (TransactionEventService.instance.hasRecentRecharge.value || 
@@ -100,38 +92,31 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
     super.onClose();
   }
   
-  // Handle transaction events
   void _handleTransactionEvent(TransactionEvent event) {
     log("Handling transaction event: ${event.type}");
     
-    // Add a small delay to ensure backend has processed the transaction
     Future.delayed(const Duration(milliseconds: 1000), () {
       refreshData();
     });
   }
   
-  // Method to reload data when balance changes
   void _reloadOnBalanceChange() {
     log("Balance changed, reloading history");
     loadData(reset: true, showMessages: false);
   }
   
-  // Method called when page becomes visible
   void onPageVisible() {
     log("History page became visible");
     
-    // Check if there was a recent recharge using the new service
-    if (TransactionEventService.instance.hasRecentRecharge.value || 
+    if (TransactionEventService.instance.hasRecentRecharge.value ||
         HomeCreditController.hasRecentRecharge.value) {
       log("Recent recharge detected on page visible, refreshing");
       refreshData();
     } else {
-      // Regular refresh to ensure data is up to date
       loadData(reset: true, showMessages: false);
     }
   }
 
-  // Public method for manual refresh
   Future<void> refreshData() async {
     print("DEBUG: refreshData() called");
     if (isRefreshing.value) {
@@ -147,13 +132,11 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
       print("DEBUG: Old transaction count: $oldCount");
       await loadData(reset: true, showMessages: false);
       
-      // Check if there are new transactions
       final newCount = _allData.length;
       print("DEBUG: New transaction count: $newCount");
       if (newCount > oldCount) {
         hasNewTransactions.value = true;
         
-        // Show success message with count
         final newTransactionsCount = newCount - oldCount;
         Get.snackbar(
           "✓ Atualizado",
@@ -167,7 +150,6 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
           icon: const Icon(Icons.check_circle, color: Colors.white),
         );
       } else {
-        // Show simple refresh confirmation
         Get.snackbar(
           "✓ Atualizado",
           "Histórico de transações atualizado",
@@ -195,7 +177,6 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
     } finally {
       isRefreshing.value = false;
       
-      // Hide new transactions indicator after some time
       Future.delayed(const Duration(seconds: 5), () {
         hasNewTransactions.value = false;
       });

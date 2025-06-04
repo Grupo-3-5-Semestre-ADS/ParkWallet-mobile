@@ -11,7 +11,7 @@ class AppButton extends StatelessWidget {
   final IconPosition iconPosition;
   final double? width;
   final double height;
-  final bool isLoading; // NOVO
+  final bool isLoading;
 
   const AppButton({
     super.key,
@@ -23,7 +23,7 @@ class AppButton extends StatelessWidget {
     this.iconPosition = IconPosition.start,
     this.width,
     this.height = 40,
-    this.isLoading = false, // NOVO
+    this.isLoading = false,
   });
 
   @override

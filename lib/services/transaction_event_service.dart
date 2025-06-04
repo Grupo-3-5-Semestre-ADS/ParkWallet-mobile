@@ -2,20 +2,15 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:get/get.dart';
 
-/// Service to manage global transaction events
 class TransactionEventService extends GetxService {
   static TransactionEventService get instance => Get.find<TransactionEventService>();
   
-  // Stream controller for transaction events
   final StreamController<TransactionEvent> _eventController = StreamController<TransactionEvent>.broadcast();
   
-  // Stream getter
   Stream<TransactionEvent> get eventStream => _eventController.stream;
   
-  // Observable for recent recharge status
   final RxBool hasRecentRecharge = false.obs;
   
-  // Timer for auto-reset
   Timer? _resetTimer;
   
   @override
@@ -31,14 +26,11 @@ class TransactionEventService extends GetxService {
     super.onClose();
   }
   
-  /// Notify that a recharge was completed
   void notifyRechargeCompleted({required double amount, required String userId}) {
     log('TransactionEventService: Recharge completed - Amount: $amount, UserId: $userId');
     
-    // Set the flag
     hasRecentRecharge.value = true;
     
-    // Add event to stream
     _eventController.add(TransactionEvent(
       type: TransactionEventType.recharge,
       amount: amount,
@@ -46,7 +38,6 @@ class TransactionEventService extends GetxService {
       timestamp: DateTime.now(),
     ));
     
-    // Reset flag after 5 seconds
     _resetTimer?.cancel();
     _resetTimer = Timer(const Duration(seconds: 5), () {
       hasRecentRecharge.value = false;
@@ -54,7 +45,6 @@ class TransactionEventService extends GetxService {
     });
   }
   
-  /// Notify that a payment was completed
   void notifyPaymentCompleted({required double amount, required String userId}) {
     log('TransactionEventService: Payment completed - Amount: $amount, UserId: $userId');
     
@@ -66,7 +56,6 @@ class TransactionEventService extends GetxService {
     ));
   }
   
-  /// Manually trigger history refresh
   void triggerHistoryRefresh() {
     log('TransactionEventService: Manual history refresh triggered');
     _eventController.add(TransactionEvent(

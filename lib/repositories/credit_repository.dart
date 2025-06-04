@@ -4,8 +4,6 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:park_wallet/constants/endpoints.dart';
-import 'package:park_wallet/data/dto/product_payment_request.dart';
-import 'package:park_wallet/data/models/user_profile.dart';
 import 'package:park_wallet/global/custom_exception.dart';
 import 'package:park_wallet/services/auth_service.dart';
 
@@ -73,7 +71,6 @@ class CreditRepository {
       log('Resposta recebida. Status: $status');
       log('Corpo da resposta: ${response.body}');
       
-      // Verificar se o corpo da resposta está vazio ou inválido
       if (response.body.isEmpty) {
         log('Resposta vazia, buscando saldo atualizado');
         return await fetchBalance();
@@ -89,7 +86,6 @@ class CreditRepository {
             return newBalance;
           } else {
             log('Novo saldo não encontrado na resposta, buscando saldo atual');
-            // Caso o novo saldo não seja retornado, buscar o saldo atualizado
             return await fetchBalance();
           }
         } else {
@@ -99,7 +95,6 @@ class CreditRepository {
         }
       } catch (parseError) {
         log('Erro ao processar JSON da resposta: $parseError');
-        // Se a recarga foi processada mas houve erro no parse, buscar o saldo atualizado
         if (status == 200) {
           return await fetchBalance();
         } else {

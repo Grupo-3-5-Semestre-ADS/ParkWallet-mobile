@@ -37,7 +37,7 @@ class CommonDrawer extends StatelessWidget {
                       style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                     Text(
-                      profileService.userProfile?.name.split(" ").first ?? '',
+                      (profileService.userProfile?.name.split(" ").first ?? profileService.userProfile?.name) ?? '',
                       style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                   ],
@@ -49,6 +49,15 @@ class CommonDrawer extends StatelessWidget {
           Expanded(
             child: ListView(
               children: [
+                ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  title: Text('profile'.tr),
+                  onTap: () {
+                    Get.back();
+                    Get.toNamed(Routes.PROFILE);
+                  },
+                ),
+                Divider(),
                 ListTile(
                   leading: const Icon(Icons.pin_drop),
                   title: Text('map'.tr),

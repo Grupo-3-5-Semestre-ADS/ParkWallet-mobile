@@ -63,7 +63,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
   String _getRouteFromIndex(int index) {
     switch (index) {
       case 0:
-        return '/home'; // Temporarily redirect to home until map is implemented
+        return '/home';
       case 1:
         return '/stores';
       case 2:
