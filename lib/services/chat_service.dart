@@ -18,13 +18,11 @@ class ChatService extends GetxService {
   final _messages = <ChatMessage>[].obs;
   final _connectionStatus = Rx<ConnectionStatus>(ConnectionStatus.disconnected);
   
-  // Current user and admin info
   String? _currentUserId;
   String? _currentUserName;
   int? _adminUserId;
   Timer? _reconnectTimer;
 
-  // Public getters
   List<ChatMessage> get messages => _messages;
   RxList<ChatMessage> get messagesObservable => _messages;
   Stream<List<ChatMessage>> get messagesStream => _messages.stream;
@@ -50,7 +48,6 @@ class ChatService extends GetxService {
       final authService = Get.find<AuthService>();
       _currentUserId = authService.userId;
       
-      // Get user name from ProfileService
       try {
         final profileService = Get.find<ProfileService>();
         _currentUserName = profileService.userProfile?.name;
@@ -62,7 +59,6 @@ class ChatService extends GetxService {
       debugPrint('ChatService: Current user ID: $_currentUserId');
       debugPrint('ChatService: Current user name: $_currentUserName');
       
-      // Set admin user ID (from seeder, admin is always user ID 1)
       _adminUserId = 1;
       debugPrint('ChatService: Admin user ID set to: $_adminUserId');
       
@@ -111,13 +107,11 @@ class ChatService extends GetxService {
       _connectionStatus.value = ConnectionStatus.connected;
       _cancelReconnectTimer();
       
-      // Announce user is online
       _socket!.emit('user_online', {
         'userId': int.parse(_currentUserId!),
         'userName': _currentUserName,
       });
 
-      // Load message history when coming online and check for new messages
       _loadMessageHistory();
       _checkForNewMessages();
     });
@@ -139,7 +133,6 @@ class ChatService extends GetxService {
       try {
         final messageData = data as Map<String, dynamic>;
         
-        // Determine sender name - if it's admin, use "Suporte", otherwise use stored name or "Unknown"
         String senderName;
         final senderUserId = messageData['senderUserId']?.toString() ?? '';
         if (senderUserId == _adminUserId.toString()) {
@@ -154,14 +147,13 @@ class ChatService extends GetxService {
           id: messageData['id']?.toString() ?? DateTime.now().millisecondsSinceEpoch.toString(),
           senderId: senderUserId,
           senderName: senderName,
-          content: messageData['message'] ?? '', // Fixed: was 'content', now 'message'
+          content: messageData['message'] ?? '',
           timestamp: DateTime.tryParse(messageData['createdAt'] ?? '') ?? DateTime.now(),
           type: MessageType.text,
           isMe: senderUserId == _currentUserId,
         );
         
-        // Only add if it's a conversation with admin
-        if (message.senderId == _adminUserId.toString() || 
+        if (message.senderId == _adminUserId.toString() ||
             messageData['recipientUserId']?.toString() == _adminUserId.toString()) {
           _addMessageSafely(message);
         } else {
@@ -184,7 +176,6 @@ class ChatService extends GetxService {
   Future<void> _loadMessageHistory() async {
     debugPrint('ChatService: === STARTING MESSAGE HISTORY LOAD ===');
     
-    // Ensure user info is initialized
     if (_currentUserId == null || _adminUserId == null) {
       debugPrint('ChatService: User info not ready, initializing...');
       await _initializeUserInfo();
@@ -207,7 +198,6 @@ class ChatService extends GetxService {
         final adminId = _adminUserId.toString();
         debugPrint('ChatService: Filtering messages for conversation between user $_currentUserId and admin $adminId');
         
-        // Filter to show only messages between current user and admin
         final filteredMessages = history.where((message) {
           final senderUserId = message.senderId;
           final isUserMessage = senderUserId == _currentUserId;
@@ -221,7 +211,6 @@ class ChatService extends GetxService {
 
         debugPrint('ChatService: After filtering: ${filteredMessages.length} relevant messages (from ${history.length} total)');
         
-        // Clear existing messages and load the complete history
         final oldCount = _messages.length;
         _messages.clear();
         _messages.addAll(filteredMessages);
@@ -230,14 +219,13 @@ class ChatService extends GetxService {
         debugPrint('ChatService: Messages list updated: $oldCount -> ${_messages.length} messages');
         debugPrint('ChatService: Complete message history loaded successfully');
         
-        // Log first and last message for debugging
         if (_messages.isNotEmpty) {
           debugPrint('ChatService: FIRST MESSAGE: "${_messages.first.content}" from ${_messages.first.senderName} (${_messages.first.timestamp})');
           debugPrint('ChatService: LAST MESSAGE: "${_messages.last.content}" from ${_messages.last.senderName} (${_messages.last.timestamp})');
         }
       } else {
         debugPrint('ChatService: No message history found or empty response from API');
-        _messages.clear(); // Ensure we start with a clean slate
+        _messages.clear();
         debugPrint('ChatService: Cleared messages list, current count: ${_messages.length}');
       }
       
@@ -245,7 +233,6 @@ class ChatService extends GetxService {
     } catch (e) {
       debugPrint('ChatService: ERROR loading message history: $e');
       debugPrint('ChatService: Stack trace: ${StackTrace.current}');
-      // Don't clear messages on error to preserve any existing state
     }
   }
 
@@ -284,8 +271,7 @@ class ChatService extends GetxService {
           return [];
         }
         
-        // Only log first 500 characters to avoid log overflow
-        final bodyPreview = response.body.length > 500 ? 
+        final bodyPreview = response.body.length > 500 ?
             '${response.body.substring(0, 500)}...' : response.body;
         debugPrint('ChatService: API Response Body Preview: $bodyPreview');
         
@@ -326,24 +312,20 @@ class ChatService extends GetxService {
   }
 
   Future<void> _checkForNewMessages() async {
-    // This method checks for messages that arrived while the user was offline
     try {
       debugPrint('ChatService: Checking for new messages...');
       
-      // Get the timestamp of the last message we have
       DateTime? lastMessageTime;
       if (_messages.isNotEmpty) {
         lastMessageTime = _messages.last.timestamp;
       }
 
-      // Request messages since last seen time
       if (lastMessageTime != null) {
         final newHistory = await _getChatHistory(int.parse(_currentUserId!));
         
         if (newHistory != null) {
           final adminId = _adminUserId.toString();
           
-          // Filter new messages after our last message
           final newMessages = newHistory.where((message) {
             final isRelevantConversation = 
                 (message.senderId == _currentUserId || message.senderId == adminId);
@@ -393,7 +375,6 @@ class ChatService extends GetxService {
       debugPrint('ChatService: Sending message: $messageData');
       _socket!.emit('send_message', messageData);
 
-      // Add message to local list immediately for better UX
       final localMessage = ChatMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         senderId: _currentUserId!,
@@ -442,26 +423,21 @@ class ChatService extends GetxService {
     await _loadMessageHistory();
   }
 
-  // Public method to initialize chat service with message history
   Future<void> initializeWithHistory() async {
     debugPrint('=== ChatService: STARTING INITIALIZATION WITH HISTORY ===');
     
     try {
-      // Step 1: Initialize user info
       debugPrint('ChatService: Step 1 - Initializing user info...');
       await _initializeUserInfo();
       debugPrint('ChatService: User ID: $_currentUserId, Admin ID: $_adminUserId');
       
-      // Step 2: Load complete message history first (independent of socket connection)
       debugPrint('ChatService: Step 2 - Loading message history...');
       await _loadMessageHistory();
       debugPrint('ChatService: Message history loaded. Current message count: ${_messages.length}');
       
-      // Step 3: Connect to socket for real-time messages
       debugPrint('ChatService: Step 3 - Connecting to socket...');
       await connect();
       
-      // Step 4: Check for any new messages that arrived while offline
       debugPrint('ChatService: Step 4 - Checking for new messages...');
       await _checkForNewMessages();
       
@@ -472,38 +448,31 @@ class ChatService extends GetxService {
     }
   }
 
-  // Public method to load message history
   Future<void> loadMessageHistory() async {
     await _loadMessageHistory();
   }
 
-  // Public method to check for new messages (useful when app comes back from background)
   Future<void> checkForNewMessages() async {
     await _checkForNewMessages();
   }
 
-  // Method specifically for handling app lifecycle - ensures we get offline messages
   Future<void> onAppResumed() async {
     debugPrint('ChatService: === APP RESUMED - CHECKING FOR UPDATES ===');
     
-    // Force reload complete message history to ensure we have everything
     debugPrint('ChatService: Force reloading complete message history...');
     await _loadMessageHistory();
     
-    // If not connected, reconnect
     if (_connectionStatus.value != ConnectionStatus.connected) {
       debugPrint('ChatService: Not connected, attempting to reconnect...');
       await connect();
     } else {
       debugPrint('ChatService: Already connected, checking for new messages...');
-      // If already connected, just check for new messages
       await _checkForNewMessages();
     }
     
     debugPrint('ChatService: App resume handling complete. Current message count: ${_messages.length}');
   }
 
-  // Image picking methods (keeping existing functionality)
   Future<void> sendImageFromCamera() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.camera);
@@ -533,7 +502,6 @@ class ChatService extends GetxService {
     }
   }
 
-  // Helper methods for UI
   bool get isConnected => _connectionStatus.value == ConnectionStatus.connected;
   bool get isConnecting => _connectionStatus.value == ConnectionStatus.connecting;
   bool get hasError => _connectionStatus.value == ConnectionStatus.error;
@@ -552,7 +520,6 @@ class ChatService extends GetxService {
   }
 
   void _addMessageSafely(ChatMessage message) {
-    // Check if message already exists to avoid duplicates
     if (!_messages.any((m) => m.id == message.id)) {
       _messages.add(message);
       _sortMessages();
@@ -563,7 +530,6 @@ class ChatService extends GetxService {
     }
   }
 
-  // Debug methods for troubleshooting
   Future<void> forceReloadHistory() async {
     debugPrint('ChatService: === FORCE RELOAD HISTORY (DEBUG) ===');
     await _loadMessageHistory();
@@ -588,17 +554,14 @@ class ChatService extends GetxService {
     debugPrint('ChatService: === END DEBUG INFO ===');
   }
 
-  // Debug method to test API connection and token
   Future<void> debugChatAPI() async {
     debugPrint('=== CHAT API DEBUG TEST ===');
     
     try {
-      // Test user info
       await _initializeUserInfo();
       debugPrint('DEBUG: User ID: $_currentUserId');
       debugPrint('DEBUG: Admin ID: $_adminUserId');
       
-      // Test token
       final authService = Get.find<AuthService>();
       final token = authService.token;
       debugPrint('DEBUG: Token available: ${token != null}');
@@ -606,7 +569,6 @@ class ChatService extends GetxService {
         debugPrint('DEBUG: Token preview: ${token.substring(0, math.min(30, token.length))}...');
       }
       
-      // Test API call
       if (_currentUserId != null) {
         debugPrint('DEBUG: Testing API call...');
         final result = await _getChatHistory(int.parse(_currentUserId!));

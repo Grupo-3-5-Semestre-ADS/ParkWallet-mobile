@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:park_wallet/data/models/store.dart';
-import 'package:park_wallet/constants/app_colors.dart';
 
 class StoreItemTile extends StatelessWidget {
   final Store item;

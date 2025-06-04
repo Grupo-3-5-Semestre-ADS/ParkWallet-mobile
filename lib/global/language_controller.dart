@@ -14,7 +14,6 @@ class LanguageController extends GetxController {
 
     final currentLocale = Get.locale ?? const Locale('pt', 'BR');
     Get.updateLocale(currentLocale);
-    print(" AAA $currentLocale");
     if (currentLocale.languageCode == 'pt') {
       flagImagePath.value = BRASIL_FLAG;
     } else if (currentLocale.languageCode == 'en') {
@@ -22,13 +21,13 @@ class LanguageController extends GetxController {
     } else if (currentLocale.languageCode == 'es') {
       flagImagePath.value = SPAIN_FLAG;
     } else {
-      flagImagePath.value = BRASIL_FLAG; // fallback
+      flagImagePath.value = BRASIL_FLAG;
     }
   }
 
 
   void changeLanguage(String langCode, String countryCode, String flag) {
-    flagImagePath.value = flag; // Atualiza a bandeira
-    Get.updateLocale(Locale(langCode, countryCode)); // Atualiza o idioma do app
+    flagImagePath.value = flag;
+    Get.updateLocale(Locale(langCode, countryCode));
   }
 }

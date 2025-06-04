@@ -11,10 +11,8 @@ class WaveBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Fundo branco sólido
         Container(color: AppColors.white),
 
-        // SVG no fundo
         Align(
           alignment: Alignment.bottomCenter,
           child: SizedBox(

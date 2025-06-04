@@ -18,13 +18,11 @@ class ChatMessage {
   });
 
   factory ChatMessage.fromJson(Map<String, dynamic> json, String currentUserId) {
-    // Map backend field names to our expected format
     final senderId = json['senderUserId']?.toString() ?? '';
     
-    // Determine sender name based on user ID
     String senderName;
     if (senderId == '1') {
-      senderName = 'Suporte'; // Admin user
+      senderName = 'Suporte';
     } else if (senderId == currentUserId) {
       senderName = 'Você';
     } else {
@@ -37,7 +35,7 @@ class ChatMessage {
       senderName: senderName,
       content: json['message'] ?? '',
       timestamp: DateTime.tryParse(json['createdAt'] ?? '') ?? DateTime.now(),
-      type: MessageType.text, // Default to text since backend doesn't specify type
+      type: MessageType.text,
       isMe: senderId == currentUserId,
     );
   }

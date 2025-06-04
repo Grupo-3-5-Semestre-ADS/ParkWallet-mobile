@@ -30,7 +30,6 @@ class HistoryCard extends StatelessWidget {
             final availableHeight = constraints.maxHeight - headerHeight;
             final maxItems = availableHeight ~/ itemHeight;
 
-            // Chama o carregamento somente após o layout ser calculado
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (historyController.maxVisibleItems.value != maxItems) {
                 historyController.maxVisibleItems.value = maxItems;

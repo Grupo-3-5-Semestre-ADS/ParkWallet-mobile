@@ -5,6 +5,7 @@ import 'package:park_wallet/pages/login/controllers/login_controller.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
 import 'package:park_wallet/pages/widgets/language_selector_button.dart';
 import 'package:park_wallet/pages/widgets/wave_background.dart';
+import 'package:park_wallet/routes/app_pages.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -16,7 +17,6 @@ class LoginPage extends StatelessWidget {
     return Stack(
       children: [
         WaveBackground(),
-        // Formulário
         Scaffold(
           backgroundColor: Colors.transparent,
           body: Center(
@@ -28,12 +28,10 @@ class LoginPage extends StatelessWidget {
                   children: [
                     const SizedBox(height: 80),
 
-                    // Logo
                     Image.asset('assets/images/logo.png', width: 300),
 
                     const SizedBox(height: 40),
 
-                    // Campo de email
                     TextField(
                       controller: _loginCtrl.emailCtrl,
                       decoration: InputDecoration(
@@ -49,7 +47,6 @@ class LoginPage extends StatelessWidget {
 
                     const SizedBox(height: 16),
 
-                    // Campo de senha
                     TextField(
                       controller: _loginCtrl.passwordCtrl,
                       obscureText: true,
@@ -70,7 +67,7 @@ class LoginPage extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
                         child: Text(
                           'forgot_password'.tr,
                           style: TextStyle(color: Colors.grey, fontSize: 14),
@@ -86,7 +83,7 @@ class LoginPage extends StatelessWidget {
                       backgroundColor: AppColors.sapphire,
                       textColor: Colors.white,
                       width: 300,
-                      isLoading: _loginCtrl.isLoading.value, // NOVO
+                      isLoading: _loginCtrl.isLoading.value,
                     )),
 
                     const SizedBox(height: 12),

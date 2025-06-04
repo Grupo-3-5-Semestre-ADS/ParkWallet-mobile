@@ -19,14 +19,12 @@ class ChatController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     _chatService = Get.find<ChatService>();
     
-    // Add app lifecycle observer to detect when app comes back from background
     WidgetsBinding.instance.addObserver(this);
     
     _initChatService();
     _subscribeToMessages();
     _subscribeToConnectionStatus();
     
-    // Initial sync of messages
     _syncInitialMessages();
   }
   
@@ -43,7 +41,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       debugPrint('ChatController: App resumed, checking for new messages');
-      // When app comes back to foreground, use the specialized method
       _chatService.onAppResumed();
     }
   }
@@ -52,11 +49,9 @@ class ChatController extends GetxController with WidgetsBindingObserver {
     debugPrint('=== ChatController: STARTING CHAT INITIALIZATION ===');
     isLoading.value = true;
     
-    // Use the new comprehensive initialization method
     _chatService.initializeWithHistory().then((_) {
       debugPrint('ChatController: Chat service initialization completed successfully');
       
-      // Force sync the loaded messages
       final currentMessages = _chatService.messages;
       debugPrint('ChatController: Messages available after init: ${currentMessages.length}');
       
@@ -64,7 +59,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
         messages.value = List.from(currentMessages);
         debugPrint('ChatController: Successfully synced ${messages.length} messages to UI');
         
-        // Log some sample messages for debugging
         for (int i = 0; i < math.min(currentMessages.length, 3); i++) {
           final msg = currentMessages[i];
           debugPrint('ChatController: Message $i: "${msg.content}" from ${msg.senderName} at ${msg.timestamp}');
@@ -80,7 +74,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
       debugPrint('ChatController: ERROR during chat service initialization: $error');
       isLoading.value = false;
       
-      // Enhanced fallback with more detailed logging
       debugPrint('ChatController: Attempting fallback history load...');
       _chatService.loadMessageHistory().then((_) {
         final fallbackMessages = _chatService.messages;
@@ -99,12 +92,10 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   }
   
   void _subscribeToMessages() {
-    // Directly observe the ChatService observable messages
     ever(_chatService.messagesObservable, (List<ChatMessage> updatedMessages) {
-      messages.value = List.from(updatedMessages); // Create a new list to trigger updates
+      messages.value = List.from(updatedMessages);
       debugPrint('ChatController: Messages updated, count: ${updatedMessages.length}');
       
-      // Auto-scroll to bottom on new message
       if (scrollController.hasClients) {
         Future.delayed(const Duration(milliseconds: 100), () {
           scrollController.animateTo(
@@ -124,7 +115,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   }
   
   void _syncInitialMessages() {
-    // Sync any existing messages from ChatService to Controller
     final currentMessages = _chatService.messages;
     debugPrint('ChatController: _syncInitialMessages called. ChatService has ${currentMessages.length} messages');
     
@@ -132,7 +122,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
       messages.value = List.from(currentMessages);
       debugPrint('ChatController: Synced ${currentMessages.length} initial messages to UI');
       
-      // Auto-scroll to bottom after syncing messages
       if (scrollController.hasClients) {
         Future.delayed(const Duration(milliseconds: 300), () {
           if (scrollController.hasClients) {
@@ -149,11 +138,9 @@ class ChatController extends GetxController with WidgetsBindingObserver {
     }
   }
   
-  // User actions
   Future<void> connect() async {
     if (!isConnected.value) {
       await _chatService.connect();
-      // Refresh messages after connecting to get any pending messages
       await _chatService.refreshMessages();
     }
   }
@@ -161,13 +148,10 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   Future<void> refreshMessages() async {
     debugPrint('ChatController: Refreshing complete message history...');
     
-    // Load complete message history from the beginning
     await _chatService.loadMessageHistory();
     
-    // Also check for any new messages that arrived while offline
     await _chatService.checkForNewMessages();
     
-    // Sync the refreshed messages
     _syncInitialMessages();
     
     debugPrint('ChatController: Message refresh completed');
@@ -184,7 +168,7 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   Future<void> pickAndSendImage() async {
     final XFile? image = await _picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 70, // Reduce quality to keep base64 size reasonable
+      imageQuality: 70,
     );
     
     if (image != null) {
@@ -195,7 +179,7 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   Future<void> takeAndSendPhoto() async {
     final XFile? photo = await _picker.pickImage(
       source: ImageSource.camera,
-      imageQuality: 70, // Reduce quality to keep base64 size reasonable
+      imageQuality: 70,
     );
     
     if (photo != null) {

@@ -42,7 +42,6 @@ class StoreDetailPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Nome da loja centralizado
                   Center(
                     child: Text(
                       controller.store.value.name,
@@ -53,7 +52,6 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  // Tipo da loja centralizado
                   Center(
                     child: Text(
                       controller.store.value.type,
@@ -64,7 +62,6 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // Imagem da loja centralizada e maior
                   Center(
                     child: controller.store.value.image != null
                         ? ClipRRect(
@@ -90,8 +87,7 @@ class StoreDetailPage extends StatelessWidget {
                             ),
                           ),
                   ),
-                  // Descrição da loja logo abaixo da foto
-                  if (controller.store.value.description != null) ...[  
+                  if (controller.store.value.description != null) ...[
                     const SizedBox(height: 16),
                     Container(
                       padding: const EdgeInsets.all(12),
@@ -110,7 +106,6 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                   ],
                   const SizedBox(height: 16),
-                  // Botão Ver no Mapa centralizado
                   Center(
                     child: SizedBox(
                       width: double.infinity,
@@ -120,12 +115,10 @@ class StoreDetailPage extends StatelessWidget {
                         icon: Icons.map,
                         iconPosition: IconPosition.start,
                         backgroundColor: AppColors.sapphire,
-                        // width: 200, // Removido para responsividade
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // Título da seção de cardápio
                   Center(
                     child: Text(
                       'products'.tr,
