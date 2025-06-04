@@ -53,7 +53,6 @@ class HomeCreditController extends GetxController {
       );
       
       hasRecentRecharge.value = true;
-      print("DEBUG: hasRecentRecharge set to true after recharge");
       
       TransactionEventService.instance.notifyRechargeCompleted(
         amount: amount,
@@ -62,20 +61,18 @@ class HomeCreditController extends GetxController {
       
       try {
         final historyController = Get.find<HistoryController>();
-        print("DEBUG: Calling immediate refreshData() on HistoryController");
         historyController.refreshData();
       } catch (e) {
-        print("DEBUG: HistoryController not found for immediate refresh: $e");
+        // HistoryController not available
       }
       
       await Future.delayed(const Duration(milliseconds: 2000));
       
       try {
         final historyController = Get.find<HistoryController>();
-        print("DEBUG: Calling delayed refreshData() on HistoryController");
         historyController.refreshData();
       } catch (e) {
-        print("DEBUG: HistoryController not found for delayed refresh: $e");
+        // HistoryController not available
       }
     } catch (e) {
       String message = e is CustomException ? e.message : "Falha ao processar recarga";

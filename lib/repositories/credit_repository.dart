@@ -68,11 +68,8 @@ class CreditRepository {
       );
 
       final status = response.statusCode;
-      log('Resposta recebida. Status: $status');
-      log('Corpo da resposta: ${response.body}');
       
       if (response.body.isEmpty) {
-        log('Resposta vazia, buscando saldo atualizado');
         return await fetchBalance();
       }
       
@@ -82,10 +79,8 @@ class CreditRepository {
         if (status == 200) {
           if (data['transaction'] != null && data['transaction']['newBalance'] != null) {
             final newBalance = double.tryParse(data['transaction']['newBalance'].toString()) ?? 0.0;
-            log('Novo saldo obtido: $newBalance');
             return newBalance;
           } else {
-            log('Novo saldo não encontrado na resposta, buscando saldo atual');
             return await fetchBalance();
           }
         } else {

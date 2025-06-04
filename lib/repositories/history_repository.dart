@@ -31,12 +31,10 @@ class HistoryRepository {
     );
 
     final status = response.statusCode;
-    print("DEBUG: History API response status: $status");
 
     if (status == 200) {
       final Map<String, dynamic> body = jsonDecode(response.body);
       final List<dynamic> data = body['data'];
-      print("DEBUG: Received ${data.length} transactions from API");
 
       return data.map((json) => Transaction.fromJson(json)).toList();
     } else if (status == 401) {

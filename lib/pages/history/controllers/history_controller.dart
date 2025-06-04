@@ -50,19 +50,15 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
     }
     
     ever(HomeCreditController.hasRecentRecharge, (hasRecharge) {
-      print("DEBUG: hasRecentRecharge changed to: $hasRecharge");
       if (hasRecharge) {
-        log("Recent recharge detected, refreshing history");
         refreshData();
         Future.delayed(const Duration(seconds: 2), () {
           HomeCreditController.hasRecentRecharge.value = false;
-          print("DEBUG: hasRecentRecharge reset to false");
         });
       }
     });
     
     _eventSubscription = TransactionEventService.instance.eventStream.listen((event) {
-      log("TransactionEvent received: $event");
       switch (event.type) {
         case TransactionEventType.recharge:
         case TransactionEventType.payment:
@@ -79,7 +75,6 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
     _periodicTimer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (TransactionEventService.instance.hasRecentRecharge.value || 
           HomeCreditController.hasRecentRecharge.value) {
-        log("Periodic check detected recent recharge, refreshing history");
         refreshData();
       }
     });
@@ -93,24 +88,18 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
   }
   
   void _handleTransactionEvent(TransactionEvent event) {
-    log("Handling transaction event: ${event.type}");
-    
     Future.delayed(const Duration(milliseconds: 1000), () {
       refreshData();
     });
   }
   
   void _reloadOnBalanceChange() {
-    log("Balance changed, reloading history");
     loadData(reset: true, showMessages: false);
   }
   
   void onPageVisible() {
-    log("History page became visible");
-    
     if (TransactionEventService.instance.hasRecentRecharge.value ||
         HomeCreditController.hasRecentRecharge.value) {
-      log("Recent recharge detected on page visible, refreshing");
       refreshData();
     } else {
       loadData(reset: true, showMessages: false);
@@ -118,9 +107,7 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
   }
 
   Future<void> refreshData() async {
-    print("DEBUG: refreshData() called");
     if (isRefreshing.value) {
-      print("DEBUG: Already refreshing, skipping");
       return;
     }
     
@@ -129,11 +116,9 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
     
     try {
       final oldCount = _allData.length;
-      print("DEBUG: Old transaction count: $oldCount");
       await loadData(reset: true, showMessages: false);
       
       final newCount = _allData.length;
-      print("DEBUG: New transaction count: $newCount");
       if (newCount > oldCount) {
         hasNewTransactions.value = true;
         
@@ -141,20 +126,8 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
         Get.snackbar(
           "✓ Atualizado",
           "$newTransactionsCount nova${newTransactionsCount > 1 ? 's' : ''} transaç${newTransactionsCount > 1 ? 'ões' : 'ão'} encontrada${newTransactionsCount > 1 ? 's' : ''}",
-          duration: const Duration(seconds: 3),
-          backgroundColor: Colors.green.withOpacity(0.9),
-          colorText: Colors.white,
-          snackPosition: SnackPosition.TOP,
-          margin: const EdgeInsets.all(8),
-          borderRadius: 8,
-          icon: const Icon(Icons.check_circle, color: Colors.white),
-        );
-      } else {
-        Get.snackbar(
-          "✓ Atualizado",
-          "Histórico de transações atualizado",
           duration: const Duration(seconds: 2),
-          backgroundColor: Colors.green.withOpacity(0.8),
+          backgroundColor: Colors.green.withOpacity(0.9),
           colorText: Colors.white,
           snackPosition: SnackPosition.TOP,
           margin: const EdgeInsets.all(8),
@@ -166,18 +139,17 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
       Get.snackbar(
         "Erro",
         "Erro ao atualizar histórico",
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 2),
         backgroundColor: Colors.red.withOpacity(0.8),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         margin: const EdgeInsets.all(8),
         borderRadius: 8,
-        icon: const Icon(Icons.error, color: Colors.white),
       );
     } finally {
       isRefreshing.value = false;
       
-      Future.delayed(const Duration(seconds: 5), () {
+      Future.delayed(const Duration(seconds: 3), () {
         hasNewTransactions.value = false;
       });
     }
