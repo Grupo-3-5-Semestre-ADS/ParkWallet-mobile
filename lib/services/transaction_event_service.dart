@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:get/get.dart';
 
 class TransactionEventService extends GetxService {
@@ -16,7 +15,6 @@ class TransactionEventService extends GetxService {
   @override
   void onInit() {
     super.onInit();
-    log('TransactionEventService initialized');
   }
   
   @override
@@ -27,8 +25,6 @@ class TransactionEventService extends GetxService {
   }
   
   void notifyRechargeCompleted({required double amount, required String userId}) {
-    log('TransactionEventService: Recharge completed - Amount: $amount, UserId: $userId');
-    
     hasRecentRecharge.value = true;
     
     _eventController.add(TransactionEvent(
@@ -41,13 +37,10 @@ class TransactionEventService extends GetxService {
     _resetTimer?.cancel();
     _resetTimer = Timer(const Duration(seconds: 5), () {
       hasRecentRecharge.value = false;
-      log('TransactionEventService: Recent recharge flag reset');
     });
   }
   
   void notifyPaymentCompleted({required double amount, required String userId}) {
-    log('TransactionEventService: Payment completed - Amount: $amount, UserId: $userId');
-    
     _eventController.add(TransactionEvent(
       type: TransactionEventType.payment,
       amount: amount,
@@ -57,7 +50,6 @@ class TransactionEventService extends GetxService {
   }
   
   void triggerHistoryRefresh() {
-    log('TransactionEventService: Manual history refresh triggered');
     _eventController.add(TransactionEvent(
       type: TransactionEventType.manualRefresh,
       timestamp: DateTime.now(),

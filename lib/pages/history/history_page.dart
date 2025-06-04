@@ -239,7 +239,6 @@ class _HistoryPageState extends State<HistoryPage> with WidgetsBindingObserver, 
       floatingActionButton: FloatingActionButton(
         mini: true,
         onPressed: () {
-          print("DEBUG: Manual refresh button pressed");
           controller.refreshData();
         },
         backgroundColor: Colors.blue,

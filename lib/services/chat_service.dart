@@ -52,15 +52,10 @@ class ChatService extends GetxService {
         final profileService = Get.find<ProfileService>();
         _currentUserName = profileService.userProfile?.name;
       } catch (e) {
-        debugPrint('ChatService: ProfileService not found or profile not loaded: $e');
         _currentUserName = null;
       }
       
-      debugPrint('ChatService: Current user ID: $_currentUserId');
-      debugPrint('ChatService: Current user name: $_currentUserName');
-      
       _adminUserId = 1;
-      debugPrint('ChatService: Admin user ID set to: $_adminUserId');
       
     } catch (e) {
       debugPrint('ChatService: Error initializing user info: $e');
@@ -69,19 +64,16 @@ class ChatService extends GetxService {
 
   Future<void> connect() async {
     if (_connectionStatus.value == ConnectionStatus.connected) {
-      debugPrint('ChatService: Already connected');
       return;
     }
 
     if (_currentUserId == null) {
-      debugPrint('ChatService: Cannot connect - current user ID is null');
       await _initializeUserInfo();
       if (_currentUserId == null) return;
     }
 
     try {
       _connectionStatus.value = ConnectionStatus.connecting;
-      debugPrint('ChatService: Connecting to Socket.IO...');
 
       _socket = IO.io(
         Endpoints.socketEndpoint,
@@ -103,7 +95,6 @@ class ChatService extends GetxService {
 
   void _setupSocketListeners() {
     _socket!.onConnect((_) {
-      debugPrint('ChatService: Connected to Socket.IO');
       _connectionStatus.value = ConnectionStatus.connected;
       _cancelReconnectTimer();
       
@@ -117,7 +108,6 @@ class ChatService extends GetxService {
     });
 
     _socket!.onDisconnect((_) {
-      debugPrint('ChatService: Disconnected from Socket.IO');
       _connectionStatus.value = ConnectionStatus.disconnected;
       _scheduleReconnect();
     });
@@ -129,7 +119,6 @@ class ChatService extends GetxService {
     });
 
     _socket!.on('receive_message', (data) {
-      debugPrint('ChatService: Received message: $data');
       try {
         final messageData = data as Map<String, dynamic>;
         
@@ -156,8 +145,6 @@ class ChatService extends GetxService {
         if (message.senderId == _adminUserId.toString() ||
             messageData['recipientUserId']?.toString() == _adminUserId.toString()) {
           _addMessageSafely(message);
-        } else {
-          debugPrint('ChatService: Message not added - not admin conversation');
         }
       } catch (e) {
         debugPrint('ChatService: Error processing received message: $e');
@@ -165,38 +152,26 @@ class ChatService extends GetxService {
     });
 
     _socket!.on('message_sent_ack', (data) {
-      debugPrint('ChatService: Message sent acknowledgment: $data');
+      // Message acknowledgment received
     });
 
     _socket!.on('error_message', (data) {
       debugPrint('ChatService: Socket error: $data');
     });
-  }
-
-  Future<void> _loadMessageHistory() async {
-    debugPrint('ChatService: === STARTING MESSAGE HISTORY LOAD ===');
-    
+  }  Future<void> _loadMessageHistory() async {
     if (_currentUserId == null || _adminUserId == null) {
-      debugPrint('ChatService: User info not ready, initializing...');
       await _initializeUserInfo();
       
       if (_currentUserId == null || _adminUserId == null) {
-        debugPrint('ChatService: CRITICAL: Cannot load history - user ID or admin ID is still null');
-        debugPrint('ChatService: Current User ID: $_currentUserId, Admin ID: $_adminUserId');
         return;
       }
     }
 
     try {
-      debugPrint('ChatService: Loading complete message history for user: $_currentUserId');
-      debugPrint('ChatService: Admin ID set to: $_adminUserId');
-      
       final history = await _getChatHistory(int.parse(_currentUserId!));
-      debugPrint('ChatService: _getChatHistory returned: ${history?.length ?? 0} messages');
       
       if (history != null && history.isNotEmpty) {
         final adminId = _adminUserId.toString();
-        debugPrint('ChatService: Filtering messages for conversation between user $_currentUserId and admin $adminId');
         
         final filteredMessages = history.where((message) {
           final senderUserId = message.senderId;
@@ -204,35 +179,19 @@ class ChatService extends GetxService {
           final isAdminMessage = senderUserId == adminId;
           final isRelevant = isUserMessage || isAdminMessage;
           
-          debugPrint('ChatService: Message from ${message.senderName} (ID: $senderUserId): "${message.content}" - Relevant: $isRelevant');
-          
           return isRelevant;
         }).toList();
 
-        debugPrint('ChatService: After filtering: ${filteredMessages.length} relevant messages (from ${history.length} total)');
-        
-        final oldCount = _messages.length;
         _messages.clear();
         _messages.addAll(filteredMessages);
         _sortMessages();
         
-        debugPrint('ChatService: Messages list updated: $oldCount -> ${_messages.length} messages');
-        debugPrint('ChatService: Complete message history loaded successfully');
-        
-        if (_messages.isNotEmpty) {
-          debugPrint('ChatService: FIRST MESSAGE: "${_messages.first.content}" from ${_messages.first.senderName} (${_messages.first.timestamp})');
-          debugPrint('ChatService: LAST MESSAGE: "${_messages.last.content}" from ${_messages.last.senderName} (${_messages.last.timestamp})');
-        }
       } else {
-        debugPrint('ChatService: No message history found or empty response from API');
         _messages.clear();
-        debugPrint('ChatService: Cleared messages list, current count: ${_messages.length}');
       }
       
-      debugPrint('ChatService: === MESSAGE HISTORY LOAD COMPLETE ===');
     } catch (e) {
       debugPrint('ChatService: ERROR loading message history: $e');
-      debugPrint('ChatService: Stack trace: ${StackTrace.current}');
     }
   }
 
