@@ -1,53 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:park_wallet/constants/app_colors.dart';         // Ajuste o caminho se necessário
+import 'package:park_wallet/constants/app_colors.dart';
 import 'package:park_wallet/pages/profile/controllers/profile_controller.dart';
-import 'package:park_wallet/pages/profile/pages/profile_edit_page.dart'; // Ajuste o caminho se necessário
-import 'package:park_wallet/pages/widgets/app_button.dart';             // Ajuste o caminho se necessário
-import 'package:park_wallet/pages/widgets/language_selector_button.dart';// Ajuste o caminho se necessário
-import 'package:park_wallet/pages/widgets/wave_background.dart';         // Ajuste o caminho se necessário
+import 'package:park_wallet/pages/profile/pages/profile_edit_page.dart';
+import 'package:park_wallet/pages/widgets/app_button.dart';
+import 'package:park_wallet/pages/widgets/language_selector_button.dart';
+import 'package:park_wallet/pages/widgets/wave_background.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Assume que ProfileController é injetado via Bindings ou Get.put anteriormente
     final ProfileController controller = Get.find<ProfileController>();
-
-    // Opcional: Chamar _loadUserProfileData se esta página puder ser acessada
-    // diretamente sem passar por uma rota que já o fez, ou se você quiser
-    // garantir um refresh sempre que ela se tornar visível.
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   if (controller.isLoadingData.value || controller.displayName.value.isEmpty) {
-    //      controller._loadUserProfileData();
-    //   }
-    // });
-
-
     return Stack(
       children: [
         WaveBackground(),
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black,),
+              onPressed: () => Get.back(),
+            ),
             title: Text('my_profile'.tr, style: const TextStyle(color: Colors.white)),
             backgroundColor: Colors.transparent,
             elevation: 0,
             iconTheme: const IconThemeData(color: Colors.white),
           ),
-          body: Obx(() { // Obx reagirá a isLoadingData e aos RxStrings (displayName, etc.)
-            // Condição de carregamento inicial mais robusta
+          body: Obx(() {
             if (controller.isLoadingData.value && controller.displayName.value.isEmpty) {
               return const Center(child: CircularProgressIndicator(color: Colors.white));
             }
-            // Se não está carregando e o perfil no serviço ainda é nulo (após tentativa de carregamento)
             if (!controller.isLoadingData.value && controller.profileService.userProfile == null) {
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    'could_not_load_profile_data'.tr, // Mensagem mais específica
+                    'could_not_load_profile_data'.tr,
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
@@ -72,13 +62,6 @@ class ProfilePage extends StatelessWidget {
                       AppButton(
                         label: 'edit_profile'.tr,
                         onPressed: () {
-                          // Antes de navegar, garante que os TextEditControllers no formulário
-                          // estão sincronizados com os dados mais recentes (caso o usuário navegue
-                          // para trás e para frente sem salvar).
-                          // _populateDisplayFieldsAndControllers já faz isso ao carregar.
-                          // Se for um caso de uso complexo, pode ser necessário chamar
-                          // controller._populateDisplayFieldsAndControllers() aqui também,
-                          // ou pelo menos sincronizar os TextEditControllers.
                           Get.to(() => const ProfileEditPage());
                         },
                         backgroundColor: AppColors.sapphire,
@@ -102,25 +85,29 @@ class ProfilePage extends StatelessWidget {
 
   Widget _buildProfileDetailItem(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7)),
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(height: 4),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
             decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.15), // Ajuste a opacidade para contraste
+              color: Colors.white.withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.black.withOpacity(0.25)), // Ajuste a opacidade
+              border: Border.all(color: Colors.black.withOpacity(0.3)),
             ),
             child: Text(
-              value.isNotEmpty ? value : 'N/A'.tr, // Traduzir 'N/A' se necessário
+              value.isNotEmpty ? value : 'N/A'.tr,
               style: const TextStyle(fontSize: 16, color: Colors.black),
             ),
           ),

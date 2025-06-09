@@ -5,6 +5,7 @@ import "package:get/get.dart";
 import "package:park_wallet/data/dto/login_request.dart";
 import "package:park_wallet/repositories/auth_repository.dart";
 import "package:park_wallet/services/auth_service.dart";
+import "package:url_launcher/url_launcher.dart";
 class LoginController extends GetxController {
   final AuthRepository authRepo = AuthRepository();
   final TextEditingController emailCtrl = TextEditingController();
@@ -55,6 +56,18 @@ class LoginController extends GetxController {
   void cleanFields() {
     emailCtrl.clear();
     passwordCtrl.clear();
+  }
+
+  void contactSupportViaWhatsApp() async {
+    final phoneNumber = '553199999999';
+    final message = Uri.encodeComponent("Olá! Esqueci minha senha, podem me ajudar?");
+    final url = Uri.parse("https://wa.me/$phoneNumber?text=$message");
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      Get.snackbar("Erro", "Não foi possível abrir o WhatsApp.");
+    }
   }
 
   @override

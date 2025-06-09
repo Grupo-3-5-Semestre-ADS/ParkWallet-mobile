@@ -11,5 +11,4 @@ abstract class Routes {
   static const MAP = '/map';
   static const PROFILE = '/profile';
   static const PROFILE_UPDATE = '/profile-update';
-  static const FORGOT_PASSWORD = '/forgot-password';
 }

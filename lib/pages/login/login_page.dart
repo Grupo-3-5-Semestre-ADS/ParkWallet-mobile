@@ -67,7 +67,7 @@ class LoginPage extends StatelessWidget {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
+                        onPressed: () => _loginCtrl.contactSupportViaWhatsApp,
                         child: Text(
                           'forgot_password'.tr,
                           style: TextStyle(color: Colors.grey, fontSize: 14),
