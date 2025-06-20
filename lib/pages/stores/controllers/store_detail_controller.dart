@@ -32,8 +32,13 @@ class StoreDetailController extends GetxController {
     try {
       final storeDetail = await storeRepository.fetchStoreById(store.value.id);
       store.value = storeDetail;
-      final storeProducts = await storeRepository.fetchStoreProducts(store.value.id);
-      products.assignAll(storeProducts);
+      // Só busca produtos se não for atração
+      if (store.value.type.toLowerCase() != 'atracao' && store.value.type.toLowerCase() != 'atração' && store.value.type.toLowerCase() != 'attraction') {
+        final storeProducts = await storeRepository.fetchStoreProducts(store.value.id);
+        products.assignAll(storeProducts);
+      } else {
+        products.clear();
+      }
     } catch (e) {
       Get.snackbar('Erro', e.toString());
     } finally {
