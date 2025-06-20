@@ -119,58 +119,61 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Center(
-                    child: Text(
-                      'products'.tr,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                  // Adiciona condicional para exibir produtos apenas se não for atração
+                  if (controller.store.value.type.toLowerCase() != 'atracao' && controller.store.value.type.toLowerCase() != 'atração' && controller.store.value.type.toLowerCase() != 'attraction') ...[
+                    Center(
+                      child: Text(
+                        'products'.tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      return ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height * 0.35,
-                          minHeight: 0,
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(16),
+                    const SizedBox(height: 8),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 0.35,
+                            minHeight: 0,
                           ),
-                          child: Obx(() {
-                            if (controller.isLoading.value) {
-                              return const Center(child: CircularProgressIndicator());
-                            }
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Obx(() {
+                              if (controller.isLoading.value) {
+                                return const Center(child: CircularProgressIndicator());
+                              }
 
-                            if (controller.products.isEmpty) {
-                              return Center(
-                                child: Text('no_products_available'.tr),
+                              if (controller.products.isEmpty) {
+                                return Center(
+                                  child: Text('no_products_available'.tr),
+                                );
+                              }
+
+                              return Scrollbar(
+                                thumbVisibility: true,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: controller.products.length,
+                                  itemBuilder: (context, index) {
+                                    final product = controller.products[index];
+                                    return _buildProductItem(product, controller, context);
+                                  },
+                                ),
                               );
-                            }
-
-                            return Scrollbar(
-                              thumbVisibility: true,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: controller.products.length,
-                                itemBuilder: (context, index) {
-                                  final product = controller.products[index];
-                                  return _buildProductItem(product, controller, context);
-                                },
-                              ),
-                            );
-                          }),
-                        ),
-                      );
-                    },
-                  ),
+                            }),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ],
               ),
             ),
