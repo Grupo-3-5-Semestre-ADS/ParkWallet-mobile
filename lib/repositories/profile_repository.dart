@@ -38,13 +38,31 @@ class ProfileRepository {
       throw CustomException('Erro ao buscar perfil: $status');
     }
   }
+
   Future<void> updateUserProfile(UserProfileUpdateRequest request) async {
-    log('[ProfileRepository] Updating user profile with: ${request.toJson()}');
-    // Replace with actual API call
-    // final response = await _apiClient.put('/profile', data: request.toJson());
-    // Handle response, throw error if update failed
-    await Future.delayed(const Duration(seconds: 1));
-    // Example: throw Exception("Simulated API error: Update failed");
-    log('[ProfileRepository] Profile update successful (simulated).');
+    final userId = authService.userId;
+    if (userId == null) throw CustomException('Usuário não autenticado.');
+    final url = Endpoints.profileEndpoint.replaceFirst('{id}', userId);
+    final uri = Uri.parse(url);
+
+    try {
+      final response = await http.put(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authService.token}',
+        },
+        body: jsonEncode(request.toJson()),
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception("Erro ao atualizar perfil: ${response.body}");
+      }
+
+      log('[ProfileRepository] Profile update successful.');
+    } catch (e) {
+      log('[ProfileRepository] Error: $e');
+      rethrow;
+    }
   }
 }

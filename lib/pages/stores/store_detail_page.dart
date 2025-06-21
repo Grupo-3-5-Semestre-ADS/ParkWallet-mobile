@@ -118,26 +118,27 @@ class StoreDetailPage extends StatelessWidget {
                       ),
                     ),
                   ),
-const SizedBox(height: 24),
-// Adiciona condicional para exibir produtos apenas se não for atração ou other
-if (controller.store.value.type.toLowerCase() != 'atracao' && 
-    controller.store.value.type.toLowerCase() != 'atração' && 
-    controller.store.value.type.toLowerCase() != 'attraction' &&
-    controller.store.value.type.toLowerCase() != 'other' &&
-    controller.store.value.type.toLowerCase() != 'outro') ...[
-  Center(
-    child: Text('products'.tr,
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  ),
-  const SizedBox(height: 8),
-  LayoutBuilder(
-    builder: (context, constraints) {
-      return ConstrainedBox(
-        constraints: BoxConstraints(
+                  const SizedBox(height: 24),
+                  // Adiciona condicional para exibir produtos apenas se não for atração ou other
+                  if (controller.store.value.type.toLowerCase() != 'atracao' && 
+                      controller.store.value.type.toLowerCase() != 'atração' && 
+                      controller.store.value.type.toLowerCase() != 'attraction' &&
+                      controller.store.value.type.toLowerCase() != 'other' &&
+                      controller.store.value.type.toLowerCase() != 'outro') ...[
+                    Center(
+                      child: Text('products'.tr,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        return ConstrainedBox(
+                          constraints: BoxConstraints(
+
                             maxHeight: MediaQuery.of(context).size.height * 0.35,
                             minHeight: 0,
                           ),
@@ -157,7 +158,6 @@ if (controller.store.value.type.toLowerCase() != 'atracao' &&
                                   child: Text('no_products_available'.tr),
                                 );
                               }
-
                               return Scrollbar(
                                 thumbVisibility: true,
                                 child: ListView.builder(

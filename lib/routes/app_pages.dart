@@ -6,7 +6,6 @@ import 'package:park_wallet/pages/history/history_page.dart';
 import 'package:park_wallet/pages/home/home_binding.dart';
 import 'package:park_wallet/pages/home/home_page.dart';
 import 'package:park_wallet/pages/login/login_page.dart';
-import 'package:park_wallet/pages/login/pages/forgot_password_page.dart';
 import 'package:park_wallet/pages/profile/profile_binding.dart';
 import 'package:park_wallet/pages/profile/profile_page.dart';
 import 'package:park_wallet/pages/register/register_page.dart';
@@ -69,10 +68,6 @@ class AppPages {
       middlewares: [AuthMiddleware()],
     ),
     GetPage(
-      name: Routes.FORGOT_PASSWORD,
-      page: () => const ForgotPasswordPage(),
-    ),
-      GetPage(
       name: Routes.MAP,
       page: () => const MapPage(),
       binding: MapBinding(),
