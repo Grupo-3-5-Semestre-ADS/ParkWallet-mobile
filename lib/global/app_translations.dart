@@ -69,6 +69,8 @@ class AppTranslations extends Translations {
       'view_on_map': 'Localizar no Mapa',
       'products': 'Cardápio',
       'no_products_available': 'Nenhum item disponível no cardápio',
+
+      'edit_profile': 'Editar Perfil',
     },
     'en_US': {
       'hello': 'Hello!',
@@ -136,6 +138,8 @@ class AppTranslations extends Translations {
       'view_on_map': 'Locate on Map',
       'products': 'Menu',
       'no_products_available': 'No items available on menu',
+
+      'edit_profile': 'Edit Profile',
     },
     'es_ES': {
       'hello': '¡Hola!',
@@ -203,6 +207,8 @@ class AppTranslations extends Translations {
       'view_on_map': 'Localizar en el Mapa',
       'products': 'Menú',
       'no_products_available': 'No hay elementos disponibles en el menú',
+
+      'edit_profile': 'Editar Perfil',
     },
   };
 }
