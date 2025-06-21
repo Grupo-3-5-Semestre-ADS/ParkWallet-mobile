@@ -63,7 +63,7 @@ class CommonBottomNavigationBar extends StatelessWidget {
   String _getRouteFromIndex(int index) {
     switch (index) {
       case 0:
-        return '/home';
+        return '/map';
       case 1:
         return '/stores';
       case 2:

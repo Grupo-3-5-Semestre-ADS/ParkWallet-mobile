@@ -119,11 +119,14 @@ class StoreDetailPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  // Adiciona condicional para exibir produtos apenas se não for atração
-                  if (controller.store.value.type.toLowerCase() != 'atracao' && controller.store.value.type.toLowerCase() != 'atração' && controller.store.value.type.toLowerCase() != 'attraction') ...[
+                  // Adiciona condicional para exibir produtos apenas se não for atração ou other
+                  if (controller.store.value.type.toLowerCase() != 'atracao' && 
+                      controller.store.value.type.toLowerCase() != 'atração' && 
+                      controller.store.value.type.toLowerCase() != 'attraction' &&
+                      controller.store.value.type.toLowerCase() != 'other' &&
+                      controller.store.value.type.toLowerCase() != 'outro') ...[
                     Center(
-                      child: Text(
-                        'products'.tr,
+                      child: Text('products'.tr,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -135,6 +138,7 @@ class StoreDetailPage extends StatelessWidget {
                       builder: (context, constraints) {
                         return ConstrainedBox(
                           constraints: BoxConstraints(
+
                             maxHeight: MediaQuery.of(context).size.height * 0.35,
                             minHeight: 0,
                           ),
@@ -149,13 +153,11 @@ class StoreDetailPage extends StatelessWidget {
                               if (controller.isLoading.value) {
                                 return const Center(child: CircularProgressIndicator());
                               }
-
                               if (controller.products.isEmpty) {
                                 return Center(
                                   child: Text('no_products_available'.tr),
                                 );
                               }
-
                               return Scrollbar(
                                 thumbVisibility: true,
                                 child: ListView.builder(
