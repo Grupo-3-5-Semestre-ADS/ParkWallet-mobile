@@ -3,6 +3,7 @@ import 'package:park_wallet/data/models/store.dart';
 import 'package:park_wallet/routes/app_pages.dart';
 import 'package:park_wallet/repositories/store_repository.dart';
 import 'package:park_wallet/pages/stores/controllers/store_detail_controller.dart';
+
 class StoresController extends GetxController {
   final RxList<Store> _allStores = <Store>[].obs;
   final RxList<Store> filteredStores = <Store>[].obs;
@@ -32,10 +33,12 @@ class StoresController extends GetxController {
     isLoading.value = true;
     try {
       final stores = await storeRepository.fetchStores(page: _currentPage, limit: _limit);
-      if (stores.length < _limit) {
+      // FILTRA APENAS LOJAS DO TIPO 'store'
+      final onlyStores = stores.where((s) => s.type?.toLowerCase() == 'store').toList();
+      if (onlyStores.length < _limit) {
         _hasMore = false;
       }
-      _allStores.addAll(stores);
+      _allStores.addAll(onlyStores);
       _applyFilter();
       _currentPage++;
     } catch (e) {
@@ -54,10 +57,12 @@ class StoresController extends GetxController {
 
   void _applyFilter() {
     final query = searchQuery.value.toLowerCase();
+    // FILTRA APENAS LOJAS DO TIPO 'store' ANTES DE FILTRAR POR NOME/TIPO
+    final onlyStores = _allStores.where((s) => s.type?.toLowerCase() == 'store').toList();
     if (query.isEmpty) {
-      filteredStores.value = _allStores;
+      filteredStores.value = onlyStores;
     } else {
-      final matches = _allStores
+      final matches = onlyStores
           .where((store) =>
               store.name.toLowerCase().contains(query) ||
               store.type.toLowerCase().contains(query))
@@ -65,12 +70,17 @@ class StoresController extends GetxController {
       filteredStores.value = matches;
     }
   }
+
   void updateSearch(String value) {
     searchQuery.value = value;
     _fetchStores(reset: true);
   }
+
   void navigateToStoreDetail(Store store) {
-    Get.delete<StoreDetailController>();
+    // Remove o controller anterior apenas se estiver registrado
+    if (Get.isRegistered<StoreDetailController>()) {
+      Get.delete<StoreDetailController>();
+    }
     Get.toNamed(Routes.STORE_DETAIL, arguments: store, preventDuplicates: false);
   }
 }

@@ -16,6 +16,8 @@ import 'package:park_wallet/pages/stores/store_detail_page.dart';
 import 'package:park_wallet/pages/stores/stores_binding.dart';
 import 'package:park_wallet/pages/stores/stores_page.dart';
 import 'package:park_wallet/services/auth_middleware.dart';
+import 'package:park_wallet/pages/map/map_binding.dart';
+import 'package:park_wallet/pages/map/map_page.dart';
 
 part 'app_routes.dart';
 
@@ -70,5 +72,11 @@ class AppPages {
       name: Routes.FORGOT_PASSWORD,
       page: () => const ForgotPasswordPage(),
     ),
+      GetPage(
+      name: Routes.MAP,
+      page: () => const MapPage(),
+      binding: MapBinding(),
+      middlewares: [AuthMiddleware()],
+    )
   ];
 }
