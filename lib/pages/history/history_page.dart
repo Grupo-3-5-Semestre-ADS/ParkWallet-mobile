@@ -211,7 +211,7 @@ class _HistoryPageState extends State<HistoryPage> with WidgetsBindingObserver, 
                                     padding: const EdgeInsets.all(12),
                                     child: Center(
                                       child: Text(
-                                        "Você chegou ao fim da lista.",
+                                        "end_of_list_message".tr,
                                         style: TextStyle(color: Colors.grey[600]),
                                       ),
                                     ),

@@ -42,7 +42,7 @@ class StoresController extends GetxController {
       _applyFilter();
       _currentPage++;
     } catch (e) {
-      Get.snackbar('Erro', e.toString());
+      Get.snackbar('error'.tr, e.toString());
     } finally {
       isLoading.value = false;
       _isFetchingMore = false;

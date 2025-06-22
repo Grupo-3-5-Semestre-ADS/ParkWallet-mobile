@@ -41,7 +41,7 @@ class StoreDetailController extends GetxController {
         products.clear();
       }
     } catch (e, s) {
-      Get.snackbar('Erro', 'Falha ao carregar detalhes: ${e.toString()}');
+      Get.snackbar('error'.tr, 'store_details_load_error'.trParams({'error': e.toString()}));
       developer.log(
         'Falha ao carregar detalhes da loja',
         error: e,
@@ -108,15 +108,15 @@ class StoreDetailController extends GetxController {
           }
         } else {
           Get.snackbar(
-            'Aviso',
-            'Esta loja não possui localização definida no mapa.',
+            'warning'.tr,
+            'store_location_not_defined'.tr,
             snackPosition: SnackPosition.BOTTOM,
           );
         }
       } catch (e, s) {
         Get.snackbar(
-          'Erro',
-          'Não foi possível obter a localização da loja.',
+          'error'.tr,
+          'store_location_fetch_error'.tr,
           snackPosition: SnackPosition.BOTTOM,
         );
         developer.log(
@@ -128,8 +128,8 @@ class StoreDetailController extends GetxController {
       }
     } else {
       Get.snackbar(
-        'Erro',
-        'Informações da loja não disponíveis.',
+        'error'.tr,
+        'store_info_unavailable'.tr,
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -200,8 +200,8 @@ class StoreDetailController extends GetxController {
 
   void addToCart(Product product) {
     Get.snackbar(
-      'Produto adicionado',
-      '${product.name} adicionado ao carrinho.',
+      'product_added'.tr,
+      'product_added_to_cart'.trParams({'product': product.name}),
       snackPosition: SnackPosition.BOTTOM,
     );
   }

@@ -147,8 +147,8 @@ class MapController extends GetxController {
       if (status.isGranted) {
         isLocationPermissionGranted.value = true;
         Get.snackbar(
-          'Sucesso',
-          'Permissão de localização concedida!',
+          'success'.tr,
+          'location_permission_granted'.tr,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.green,
           colorText: Colors.white,
@@ -292,7 +292,7 @@ class MapController extends GetxController {
         });
       }
     } else {
-      Get.snackbar('Aviso', 'Localização da loja não encontrada no mapa.');
+      Get.snackbar('warning'.tr, 'store_location_not_found'.tr);
     }
   }
 
@@ -375,7 +375,7 @@ class MapController extends GetxController {
       productsForBottomSheet.assignAll(fetchedProducts);
     } catch (e) {
       print('Erro ao buscar produtos: $e');
-      Get.snackbar('Erro', 'Não foi possível carregar os produtos da loja.');
+      Get.snackbar('error'.tr, 'store_products_load_error'.tr);
     } finally {
       isLoadingProductsForBottomSheet.value = false;
     }
@@ -425,11 +425,11 @@ class MapController extends GetxController {
         _updateMarkersSelection();
       } else {
         print('Erro na API: ${response.statusCode} - ${response.body}');
-        Get.snackbar('Erro de API', 'Falha ao buscar locais: ${response.statusCode}');
+        Get.snackbar('api_error'.tr, 'api_fetch_failed'.trParams({'statusCode': response.statusCode.toString()}));
       }
     } catch (e) {
       print('Erro de rede: $e');
-      Get.snackbar('Erro de Rede', 'Não foi possível conectar ao servidor.');
+      Get.snackbar('network_error'.tr, 'server_connection_failed'.tr);
     } finally {
       isLoadingFacilities.value = false;
     }
@@ -533,7 +533,7 @@ Future<void> centerOnPark() async {
 
       if (stores.isEmpty) {
         Get.snackbar(
-            'Nenhuma loja encontrada', 'Não há lojas cadastradas no mapa.',
+            'store_not_found'.tr, 'no_stores_on_map'.tr,
             snackPosition: SnackPosition.BOTTOM);
         return;
       }
@@ -573,7 +573,7 @@ Future<void> centerOnPark() async {
       if (Get.isDialogOpen ?? false) {
         Get.back();
       }
-      Get.snackbar('Erro', 'Não foi possível encontrar a loja mais próxima.',
+      Get.snackbar('error'.tr, 'nearest_store_not_found'.tr,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.red,
           colorText: Colors.white);
@@ -585,8 +585,8 @@ Future<void> centerOnPark() async {
     final hasPermission = await _ensureLocationPermission();
     if (!hasPermission) {
       Get.snackbar(
-        'Permissão Negada',
-        'Não é possível obter a localização sem a sua permissão.',
+        'location_permission_denied'.tr,
+        'location_permission_denied_message'.tr,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -604,13 +604,13 @@ Future<void> centerOnPark() async {
               children: [
                 const CircularProgressIndicator(),
                 const SizedBox(height: 20),
-                const Text('Obtendo sua localização...'),
+                Text('getting_location'.tr),
                 const SizedBox(height: 20),
                 TextButton(
                   onPressed: () {
                     Get.back();
                   },
-                  child: const Text('Cancelar'),
+                  child: Text('cancel'.tr),
                 ),
               ],
             ),
@@ -637,8 +637,8 @@ Future<void> centerOnPark() async {
     } catch (e) {
       Get.back();
       Get.snackbar(
-        'Erro',
-        'Não foi possível obter sua localização. Verifique se o GPS está ativado.',
+        'error'.tr,
+        'location_fetch_error'.tr,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.orange[800],
         colorText: Colors.white,

@@ -169,16 +169,16 @@ class HistoryController extends GetxController with GetTickerProviderStateMixin 
 
       if (newData.isEmpty && _allData.isEmpty && showMessages) {
         Get.snackbar(
-          "Sem Dados",
-          "Não há transações anteriores.",
+          "no_data".tr,
+          "no_previous_transactions".tr,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.orange,
           colorText: Colors.white,
         );
       } else if (newData.isEmpty && _allData.isNotEmpty && showMessages) {
         Get.snackbar(
-          "Fim da Lista",
-          "Você já visualizou todas as transações.",
+          "end_of_list".tr,
+          "end_of_list_message".tr,
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.blueGrey,
           colorText: Colors.white,

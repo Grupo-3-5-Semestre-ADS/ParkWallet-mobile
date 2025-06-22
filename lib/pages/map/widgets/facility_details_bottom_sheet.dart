@@ -110,7 +110,7 @@ class FacilityDetailsBottomSheet extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => Get.back(),
               style: ElevatedButton.styleFrom(backgroundColor: AppColors.sapphire, minimumSize: const Size(double.infinity, 50), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-              child: const Text('Fechar', style: TextStyle(fontSize: 16, color: Colors.white)),
+              child: Text('close'.tr, style: const TextStyle(fontSize: 16, color: Colors.white)),
             ),
           ),
         ],
