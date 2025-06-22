@@ -8,7 +8,7 @@
         android:maxSdkVersion="32" />
 
     <application
-        android:label="park_wallet"
+        android:label="ParkWallet"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

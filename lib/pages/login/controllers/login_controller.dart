@@ -59,14 +59,18 @@ class LoginController extends GetxController {
   }
 
   void contactSupportViaWhatsApp() async {
-    final phoneNumber = '553199999999';
+    final phoneNumber = '554599388327';
     final message = Uri.encodeComponent("Olá! Esqueci minha senha, podem me ajudar?");
-    final url = Uri.parse("https://wa.me/$phoneNumber?text=$message");
+    final urlString = "https://wa.me/$phoneNumber?text=$message";
+    final url = Uri.parse(urlString);
 
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      Get.snackbar("Erro", "Não foi possível abrir o WhatsApp.");
+    try {
+      final launched = await launchUrl(url, mode: LaunchMode.externalApplication);
+      if (!launched) {
+        Get.snackbar("Erro", "Não foi possível abrir o WhatsApp.");
+      }
+    } catch (e) {
+      Get.snackbar("Erro", "Erro ao abrir o WhatsApp: $e");
     }
   }
 
