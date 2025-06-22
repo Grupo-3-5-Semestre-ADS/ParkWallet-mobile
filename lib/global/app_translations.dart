@@ -70,6 +70,7 @@ class AppTranslations extends Translations {
       'no_products_available': 'Nenhum item disponível no cardápio',
 
       'edit_profile': 'Editar Perfil',
+      'profile': 'Perfil',
 
       // Permissões de localização e mapa
       'allow_location': 'Permitir localização',
@@ -210,6 +211,7 @@ class AppTranslations extends Translations {
       'no_products_available': 'No items available on menu',
 
       'edit_profile': 'Edit Profile',
+      'profile': 'Profile',
 
       // Location/map permissions
       'allow_location': 'Allow location',
@@ -350,6 +352,7 @@ class AppTranslations extends Translations {
       'no_products_available': 'No hay elementos disponibles en el menú',
 
       'edit_profile': 'Editar Perfil',
+      'profile': 'Perfil',
 
       // Permisos de localización y mapa
       'allow_location': 'Permitir ubicación',
