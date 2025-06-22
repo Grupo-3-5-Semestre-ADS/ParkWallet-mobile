@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:park_wallet/data/models/store.dart';
 
 class StoreItemTile extends StatelessWidget {
@@ -42,7 +43,7 @@ class StoreItemTile extends StatelessWidget {
         maxLines: 1,
       ),
       subtitle: Text(
-        item.type,
+        item.type.tr,
         style: const TextStyle(fontSize: 11),
         overflow: TextOverflow.ellipsis,
       ),
