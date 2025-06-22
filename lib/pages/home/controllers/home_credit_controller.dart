@@ -45,8 +45,8 @@ class HomeCreditController extends GetxController {
       final newBalance = await creditRepository.rechargeCredit(amount);
       balance.value = newBalance;
       Get.snackbar(
-        "Sucesso", 
-        "Recarga de R\$ ${amount.toStringAsFixed(2)} realizada com sucesso!",
+        "success".tr, 
+        "recharge_success".trParams({'amount': amount.toStringAsFixed(2)}),
         backgroundColor: Colors.green,
         colorText: Colors.white,
         duration: const Duration(seconds: 3),

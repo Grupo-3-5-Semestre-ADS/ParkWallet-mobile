@@ -123,8 +123,9 @@ class StoreDetailPage extends StatelessWidget {
                   if (controller.store.value.type.toLowerCase() != 'atracao' && 
                       controller.store.value.type.toLowerCase() != 'atração' && 
                       controller.store.value.type.toLowerCase() != 'attraction' &&
+                      controller.store.value.type.toLowerCase() != 'outro' &&
                       controller.store.value.type.toLowerCase() != 'other' &&
-                      controller.store.value.type.toLowerCase() != 'outro') ...[
+                      controller.store.value.type.toLowerCase() != 'atracción') ...[
                     Center(
                       child: Text('products'.tr,
                         style: const TextStyle(

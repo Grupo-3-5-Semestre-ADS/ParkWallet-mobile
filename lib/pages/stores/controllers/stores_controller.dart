@@ -33,12 +33,12 @@ class StoresController extends GetxController {
     isLoading.value = true;
     try {
       final stores = await storeRepository.fetchStores(page: _currentPage, limit: _limit);
-      // FILTRA APENAS LOJAS DO TIPO 'store'
-      final onlyStores = stores.where((s) => s.type?.toLowerCase() == 'store').toList();
-      if (onlyStores.length < _limit) {
+      // Removido filtro para exibir todos os tipos (store, atracao, other, etc)
+      final allFetchedStores = stores;
+      if (allFetchedStores.length < _limit) {
         _hasMore = false;
       }
-      _allStores.addAll(onlyStores);
+      _allStores.addAll(allFetchedStores);
       _applyFilter();
       _currentPage++;
     } catch (e) {
@@ -57,12 +57,11 @@ class StoresController extends GetxController {
 
   void _applyFilter() {
     final query = searchQuery.value.toLowerCase();
-    // FILTRA APENAS LOJAS DO TIPO 'store' ANTES DE FILTRAR POR NOME/TIPO
-    final onlyStores = _allStores.where((s) => s.type?.toLowerCase() == 'store').toList();
+    // Agora filtra todos os tipos
     if (query.isEmpty) {
-      filteredStores.value = onlyStores;
+      filteredStores.value = _allStores;
     } else {
-      final matches = onlyStores
+      final matches = _allStores
           .where((store) =>
               store.name.toLowerCase().contains(query) ||
               store.type.toLowerCase().contains(query))

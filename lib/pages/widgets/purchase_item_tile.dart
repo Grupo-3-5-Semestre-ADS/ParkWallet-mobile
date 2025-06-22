@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:park_wallet/data/dto/product_response.dart';
 import 'package:park_wallet/data/dto/transaction.dart';
 import 'package:park_wallet/repositories/product_repository.dart';
+import 'package:get/get.dart';
 
 
 void showTransactionDetailsModal(BuildContext context, Transaction transaction) {
@@ -87,7 +88,7 @@ class PurchaseItemTile extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(horizontal: 12),
       leading:const Icon(Icons.fastfood, size: 28),
       title: Text(
-        "Compra realizada",
+        "purchase_completed".tr,
         style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
