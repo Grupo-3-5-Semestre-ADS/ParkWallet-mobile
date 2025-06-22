@@ -93,7 +93,7 @@ class _MapPageState extends State<MapPage> {
                       Icons.home,
                       color: Colors.white,
                     ),
-                    tooltip: 'Centralizar no parque',
+                    tooltip: 'center_on_park'.tr,
                   ),
                   const SizedBox(height: 10),
                   FloatingActionButton(
@@ -104,7 +104,7 @@ class _MapPageState extends State<MapPage> {
                       Icons.store_mall_directory,
                       color: Colors.white,
                     ),
-                    tooltip: 'Encontrar loja mais próxima',
+                    tooltip: 'find_nearest_store'.tr,
                   ),
                   const SizedBox(height: 10),
                   FloatingActionButton(
@@ -115,7 +115,7 @@ class _MapPageState extends State<MapPage> {
                       Icons.location_searching,
                       color: Colors.white,
                     ),
-                    tooltip: 'Minha Localização',
+                    tooltip: 'my_location'.tr,
                   ),
                 ],
               ),

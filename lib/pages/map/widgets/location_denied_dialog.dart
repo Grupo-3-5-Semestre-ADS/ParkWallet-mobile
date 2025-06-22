@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
 
 class LocationDeniedDialog extends StatelessWidget {
@@ -19,49 +20,49 @@ class LocationDeniedDialog extends StatelessWidget {
           children: [
             Icon(Icons.location_off, color: Colors.red[600], size: 28),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Localização Negada',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+                'location_denied'.tr,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
               ),
             ),
           ],
         ),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'O acesso à localização é obrigatório para usar o mapa do ParkWallet.',
-              style: TextStyle(fontSize: 16),
+              'location_access_required'.tr,
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              'Sem a localização, você não poderá:',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              'without_location_you_cannot'.tr,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
-                Icon(Icons.close, color: Colors.red, size: 18),
-                SizedBox(width: 8),
-                Expanded(child: Text('Ver sua posição no mapa', style: TextStyle(fontSize: 14))),
+                const Icon(Icons.close, color: Colors.red, size: 18),
+                const SizedBox(width: 8),
+                Expanded(child: Text('see_position_on_map'.tr, style: const TextStyle(fontSize: 14))),
               ],
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Row(
               children: [
-                Icon(Icons.close, color: Colors.red, size: 18),
-                SizedBox(width: 8),
-                Expanded(child: Text('Encontrar lojas próximas', style: TextStyle(fontSize: 14))),
+                const Icon(Icons.close, color: Colors.red, size: 18),
+                const SizedBox(width: 8),
+                Expanded(child: Text('find_nearby'.tr, style: const TextStyle(fontSize: 14))),
               ],
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Row(
               children: [
-                Icon(Icons.close, color: Colors.red, size: 18),
-                SizedBox(width: 8),
-                Expanded(child: Text('Calcular distâncias', style: TextStyle(fontSize: 14))),
+                const Icon(Icons.close, color: Colors.red, size: 18),
+                const SizedBox(width: 8),
+                Expanded(child: Text('calculate_distances'.tr, style: const TextStyle(fontSize: 14))),
               ],
             ),
           ],
@@ -75,7 +76,7 @@ class LocationDeniedDialog extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: Colors.grey[600],
             ),
-            child: const Text('Voltar'),
+            child: Text('go_back'.tr),
           ),
           ElevatedButton(
             onPressed: onRetryPressed,
@@ -84,7 +85,7 @@ class LocationDeniedDialog extends StatelessWidget {
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
-            child: const Text('Tentar Novamente'),
+            child: Text('try_again'.tr),
           ),
         ],
       ),

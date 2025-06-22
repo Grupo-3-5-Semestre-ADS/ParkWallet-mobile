@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
 
 class LocationPermissionDialog extends StatelessWidget {
@@ -21,50 +22,50 @@ class LocationPermissionDialog extends StatelessWidget {
           children: [
             Icon(Icons.location_on, color: AppColors.sapphire, size: 28),
             const SizedBox(width: 8),
-            const Expanded(
+            Expanded(
               child: Text(
-                'Permitir localização',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                'allow_location'.tr,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
           ],
         ),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'O ParkWallet precisa acessar sua localização para:',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              'location_permission_rationale'.tr,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Row(
               children: [
-                Icon(Icons.near_me, color: Colors.blue, size: 20),
-                SizedBox(width: 8),
-                Expanded(child: Text('Encontrar lojas próximas a você')),
+                const Icon(Icons.near_me, color: Colors.blue, size: 20),
+                const SizedBox(width: 8),
+                Expanded(child: Text('find_nearby_stores'.tr)),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
-                Icon(Icons.navigation, color: Colors.green, size: 20),
-                SizedBox(width: 8),
-                Expanded(child: Text('Mostrar sua posição no mapa')),
+                const Icon(Icons.navigation, color: Colors.green, size: 20),
+                const SizedBox(width: 8),
+                Expanded(child: Text('show_position_on_map'.tr)),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
-                Icon(Icons.route, color: Colors.orange, size: 20),
-                SizedBox(width: 8),
-                Expanded(child: Text('Calcular distâncias')),
+                const Icon(Icons.route, color: Colors.orange, size: 20),
+                const SizedBox(width: 8),
+                Expanded(child: Text('calculate_distances'.tr)),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              'Esta permissão é necessária para o funcionamento completo do aplicativo.',
-              style: TextStyle(fontSize: 14, color: Colors.grey, fontStyle: FontStyle.italic),
+              'location_permission_needed'.tr,
+              style: const TextStyle(fontSize: 14, color: Colors.grey, fontStyle: FontStyle.italic),
             ),
           ],
         ),
@@ -74,7 +75,7 @@ class LocationPermissionDialog extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: Colors.grey[600],
             ),
-            child: const Text('Negar', style: TextStyle(fontSize: 16)),
+            child: Text('deny'.tr, style: const TextStyle(fontSize: 16)),
           ),
           ElevatedButton(
             onPressed: onAllowPressed,
@@ -83,7 +84,7 @@ class LocationPermissionDialog extends StatelessWidget {
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
-            child: const Text('Abrir configurações', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            child: Text('open_settings'.tr, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
