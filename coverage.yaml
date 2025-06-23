@@ -1,0 +1,34 @@
+# Configuração para cobertura de testes
+coverage:
+  # Diretórios a serem incluídos na cobertura
+  include:
+    - lib/controllers/**
+    - lib/repositories/**
+    - lib/services/**
+    - lib/models/**
+    - lib/dto/**
+    - lib/global/**
+    - lib/constants/**
+  
+  # Diretórios a serem excluídos da cobertura
+  exclude:
+    - lib/main.dart
+    - lib/routes/**
+    - lib/pages/widgets/**
+    - lib/pages/**/widgets/**
+    - test/**
+    - **/*.g.dart
+    - **/*.freezed.dart
+  
+  # Configurações de relatório
+  report:
+    html: true
+    lcov: true
+    json: false
+    
+  # Configurações de threshold (mínimo de cobertura)
+  threshold:
+    statements: 70
+    branches: 60
+    functions: 70
+    lines: 70 

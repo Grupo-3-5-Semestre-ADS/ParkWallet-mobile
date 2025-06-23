@@ -13,7 +13,9 @@ class LanguageController extends GetxController {
     super.onInit();
 
     final currentLocale = Get.locale ?? const Locale('pt', 'BR');
-    Get.updateLocale(currentLocale);
+    if (!Get.testMode) {
+      Get.updateLocale(currentLocale);
+    }
     if (currentLocale.languageCode == 'pt') {
       flagImagePath.value = BRASIL_FLAG;
     } else if (currentLocale.languageCode == 'en') {
@@ -28,6 +30,8 @@ class LanguageController extends GetxController {
 
   void changeLanguage(String langCode, String countryCode, String flag) {
     flagImagePath.value = flag;
-    Get.updateLocale(Locale(langCode, countryCode));
+    if (!Get.testMode) {
+      Get.updateLocale(Locale(langCode, countryCode));
+    }
   }
 }

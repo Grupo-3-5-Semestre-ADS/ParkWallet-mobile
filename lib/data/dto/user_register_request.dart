@@ -16,7 +16,7 @@ class UserRegisterRequest {
     return {
       'name': name,
       'cpf': cpf,
-      'birthdate': birthDate,
+      'birthDate': birthDate,
       'email': email,
       'password': password,
     };
