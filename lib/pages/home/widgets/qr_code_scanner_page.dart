@@ -94,7 +94,7 @@ class QRCodeScannerPage extends StatelessWidget {
 
     await Get.dialog(
       AlertDialog(
-        title: const Text('Confirmar Pagamento'),
+        title: Text('confirm_payment'.tr),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -115,7 +115,7 @@ class QRCodeScannerPage extends StatelessWidget {
                         style: const TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                       Text(
-                        'R\$ ${item['price'].toStringAsFixed(2)} x ${item['quantity']}',
+                        'R\$ ${item['price'].toStringAsFixed(2)} x ${item['quantity']}',
                         style: const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
@@ -142,17 +142,16 @@ class QRCodeScannerPage extends StatelessWidget {
         actions: [
           AppButton(
             width: 120,
-            label: 'Cancelar',
+            label: 'cancel'.tr,
             backgroundColor: Colors.red,
             onPressed: () {
               Get.until((route) => route.settings.name == Routes.HOME);
-
             },
           ),
           const SizedBox(width: 10),
           Obx(() => AppButton(
             width: 120,
-            label: 'Confirmar',
+            label: 'confirm'.tr,
             backgroundColor: Colors.green,
             isLoading: isConfirmingPayment.value,
             onPressed: isConfirmingPayment.value

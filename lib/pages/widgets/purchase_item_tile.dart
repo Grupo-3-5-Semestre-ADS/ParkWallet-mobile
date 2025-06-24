@@ -13,7 +13,7 @@ void showTransactionDetailsModal(BuildContext context, Transaction transaction) 
     context: context,
     builder: (_) {
       return AlertDialog(
-        title: const Text("Detalhes da Transação"),
+        title: Text('transaction_details'.tr),
         content: FutureBuilder<List<Map<String, dynamic>>>(
           future: Future.wait(
             transaction.items.map((item) async {
@@ -29,7 +29,7 @@ void showTransactionDetailsModal(BuildContext context, Transaction transaction) 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const SizedBox(height: 100, child: Center(child: CircularProgressIndicator()));
             } else if (snapshot.hasError) {
-              return Text("Erro: ${snapshot.error}");
+              return Text("${'error'.tr}: \\${snapshot.error}");
             } else {
               final items = snapshot.data!;
               return SizedBox(
@@ -46,12 +46,12 @@ void showTransactionDetailsModal(BuildContext context, Transaction transaction) 
                     return ListTile(
                       title: Text(product.name),
                       subtitle: Text(
-                        "Quantidade: $quantity\n"
-                            "Instalação: ${product.facility?.name ?? 'N/A'}",
+                        "${'quantity'.tr}: $quantity\n"
+                        "${'facility'.tr}: \\${product.facility?.name ?? 'N/A'}",
                         style: const TextStyle(fontSize: 12),
                       ),
                       trailing: Text(
-                        "R\$ ${total.toStringAsFixed(2)}",
+                        "R\$ \\${total.toStringAsFixed(2)}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     );
@@ -63,7 +63,7 @@ void showTransactionDetailsModal(BuildContext context, Transaction transaction) 
         ),
         actions: [
           TextButton(
-            child: const Text("Fechar"),
+            child: Text('close'.tr),
             onPressed: () => Navigator.of(context).pop(),
           )
         ],
