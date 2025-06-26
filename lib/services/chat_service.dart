@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:park_wallet/data/models/chat_message.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:park_wallet/services/auth_service.dart';
 import 'package:park_wallet/services/profile_service.dart';
 import 'package:park_wallet/constants/endpoints.dart';
@@ -430,35 +429,6 @@ class ChatService extends GetxService {
     }
     
     debugPrint('ChatService: App resume handling complete. Current message count: ${_messages.length}');
-  }
-
-  Future<void> sendImageFromCamera() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-    
-    if (image != null) {
-      await _sendImageMessage(image);
-    }
-  }
-
-  Future<void> sendImageFromGallery() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    
-    if (image != null) {
-      await _sendImageMessage(image);
-    }
-  }
-
-  Future<void> _sendImageMessage(XFile imageFile) async {
-    try {
-      final bytes = await imageFile.readAsBytes();
-      final base64Image = base64Encode(bytes);
-      
-      await sendMessage('[IMAGE]:$base64Image');
-    } catch (e) {
-      debugPrint('ChatService: Error sending image: $e');
-    }
   }
 
   bool get isConnected => _connectionStatus.value == ConnectionStatus.connected;
