@@ -3,14 +3,17 @@ import 'package:get/get.dart';
 import 'package:park_wallet/constants/app_colors.dart';
 import 'package:park_wallet/constants/input_formatters/currency_input_formatter.dart';
 import 'package:park_wallet/pages/home/controllers/home_credit_controller.dart';
+import 'package:park_wallet/pages/home/controllers/home_history_controller.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
 
 class CreditCard extends StatelessWidget {
   final HomeCreditController creditCtrl;
+  final HomeHistoryController historyController;
 
   const CreditCard({
     super.key,
     required this.creditCtrl,
+    required this.historyController
   });
 
   void _showRechargeDialog(BuildContext context) {
@@ -49,7 +52,11 @@ class CreditCard extends StatelessWidget {
                 child: AppButton(
                   backgroundColor: AppColors.sapphire,
                   label: "recharge".tr,
-                  onPressed: () => creditCtrl.handleRecharge(context),
+                  onPressed: () async => {
+                    await creditCtrl.handleRecharge(context),
+                    await Future.delayed(Duration(seconds: 2)),
+                    historyController.loadHistory()
+                  },
                   height: 40,
                 ),
               ),

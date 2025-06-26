@@ -75,7 +75,6 @@ class CreditRepository {
       
       try {
         final data = jsonDecode(response.body);
-
         if (status == 200) {
           if (data['transaction'] != null && data['transaction']['newBalance'] != null) {
             final newBalance = double.tryParse(data['transaction']['newBalance'].toString()) ?? 0.0;

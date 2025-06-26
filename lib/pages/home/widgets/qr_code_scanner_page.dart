@@ -11,18 +11,34 @@ import 'package:park_wallet/repositories/product_repository.dart';
 import 'package:park_wallet/pages/widgets/app_button.dart';
 import 'package:park_wallet/routes/app_pages.dart';
 
-class QRCodeScannerPage extends StatelessWidget {
-  QRCodeScannerPage({super.key});
+class QRCodeScannerPage extends StatefulWidget {
+  const QRCodeScannerPage({super.key});
 
+  @override
+  State<QRCodeScannerPage> createState() => _QRCodeScannerPageState();
+}
+
+class _QRCodeScannerPageState extends State<QRCodeScannerPage> {
   final PaymentRepository paymentRepository = PaymentRepository();
   final RxBool isProcessing = false.obs;
-  final MobileScannerController scannerController = MobileScannerController();
+
+  late final MobileScannerController scannerController;
+
+  @override
+  void initState() {
+    super.initState();
+    scannerController = MobileScannerController();
+  }
+
+  @override
+  void dispose() {
+    scannerController.dispose();
+    super.dispose();
+  }
 
   void _handleScan(BarcodeCapture capture) async {
     if (isProcessing.value) return;
     isProcessing.value = true;
-
-    scannerController.stop();
 
     bool hasError = false;
     String? errorMessage;
@@ -71,6 +87,7 @@ class QRCodeScannerPage extends StatelessWidget {
       Get.offAllNamed(Routes.HOME);
       await Future.delayed(const Duration(milliseconds: 300));
       await _showConfirmationDialog(products, detailedProducts);
+
     } catch (e) {
       hasError = true;
       errorMessage = "Erro ao ler dados: $e";
@@ -115,7 +132,7 @@ class QRCodeScannerPage extends StatelessWidget {
                         style: const TextStyle(color: Colors.grey, fontSize: 12),
                       ),
                       Text(
-                        'R\$ ${item['price'].toStringAsFixed(2)} x ${item['quantity']}',
+                        'R\$ ${item['price'].toStringAsFixed(2)} x ${item['quantity']}',
                         style: const TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
@@ -145,7 +162,7 @@ class QRCodeScannerPage extends StatelessWidget {
             label: 'cancel'.tr,
             backgroundColor: Colors.red,
             onPressed: () {
-              Get.until((route) => route.settings.name == Routes.HOME);
+              Get.back();
             },
           ),
           const SizedBox(width: 10),
@@ -173,7 +190,7 @@ class QRCodeScannerPage extends StatelessWidget {
                 log("Erro no pagamento: $e");
               } finally {
                 isConfirmingPayment.value = false;
-                Get.until((route) => route.settings.name == Routes.HOME);
+                Get.back();
                 await Future.delayed(const Duration(milliseconds: 100));
 
                 if (successMessage != null) {
@@ -205,7 +222,6 @@ class QRCodeScannerPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            scannerController.stop();
             Get.offAllNamed(Routes.HOME);
           },
         ),

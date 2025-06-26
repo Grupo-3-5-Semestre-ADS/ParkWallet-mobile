@@ -88,7 +88,7 @@ class HomeCreditController extends GetxController {
     }
   }
   
-  void handleRecharge(BuildContext context) {
+  Future<void> handleRecharge(BuildContext context) async {
     final rawText = valueController.text.trim();
     final normalized = rawText.replaceAll('.', '').replaceAll(',', '.');
 

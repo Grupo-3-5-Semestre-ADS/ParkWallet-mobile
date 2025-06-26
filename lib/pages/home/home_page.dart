@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-                child: CreditCard(creditCtrl: creditCtrl),
+                child: CreditCard(creditCtrl: creditCtrl, historyController: historyCtrl,),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),

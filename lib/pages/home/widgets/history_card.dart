@@ -28,7 +28,7 @@ class HistoryCard extends StatelessWidget {
             const itemHeight = 70.0;
             const headerHeight = 50.0;
             final availableHeight = constraints.maxHeight - headerHeight;
-            final maxItems = availableHeight ~/ itemHeight;
+            final maxItems = (availableHeight ~/ itemHeight) - 1;
 
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (historyController.maxVisibleItems.value != maxItems) {
