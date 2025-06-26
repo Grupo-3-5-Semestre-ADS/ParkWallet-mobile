@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:park_wallet/data/models/chat_message.dart';
 import 'package:park_wallet/services/chat_service.dart';
 import 'dart:math' as math;
@@ -12,7 +11,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
   final RxBool isConnected = false.obs;
   final RxBool isLoading = true.obs;
   final RxList<ChatMessage> messages = <ChatMessage>[].obs;
-  final ImagePicker _picker = ImagePicker();
   
   @override
   void onInit() {
@@ -162,28 +160,6 @@ class ChatController extends GetxController with WidgetsBindingObserver {
     if (message.isNotEmpty) {
       await _chatService.sendMessage(message);
       messageController.clear();
-    }
-  }
-  
-  Future<void> pickAndSendImage() async {
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
-    
-    if (image != null) {
-      await _chatService.sendImageFromGallery();
-    }
-  }
-  
-  Future<void> takeAndSendPhoto() async {
-    final XFile? photo = await _picker.pickImage(
-      source: ImageSource.camera,
-      imageQuality: 70,
-    );
-    
-    if (photo != null) {
-      await _chatService.sendImageFromCamera();
     }
   }
 }

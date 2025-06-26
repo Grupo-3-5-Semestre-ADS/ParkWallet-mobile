@@ -126,13 +126,6 @@ class ChatPage extends GetView<ChatController> {
       ),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () {
-              _showImageSourceOptions(context);
-            },
-            icon: const Icon(Icons.add_photo_alternate_outlined),
-            color: AppColors.sapphire,
-          ),
           Expanded(
             child: TextField(
               controller: controller.messageController,
@@ -165,36 +158,6 @@ class ChatPage extends GetView<ChatController> {
           ),
         ],
       ),
-    );
-  }
-
-  void _showImageSourceOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: Text('gallery'.tr),
-                onTap: () {
-                  Navigator.pop(context);
-                  controller.pickAndSendImage();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: Text('camera'.tr),
-                onTap: () {
-                  Navigator.pop(context);
-                  controller.takeAndSendPhoto();
-                },
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
